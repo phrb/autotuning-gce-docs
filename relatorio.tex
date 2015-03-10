@@ -1,0 +1,93 @@
+%
+% Modelo de relatório/trabalho
+%
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{array}
+\usepackage{fixltx2e}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{a4wide}
+\usepackage{multicol}
+\usepackage[table]{xcolor}
+\usepackage{makeidx}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage[nottoc]{tocbibind}
+\usepackage{listings}
+\usepackage[a4paper,top=2.0cm,bottom=2.0cm,left=1.83cm,right=2.0cm]{geometry}
+\usepackage[square, sort, comma, numbers]{natbib}
+
+\onehalfspacing
+\graphicspath{{./img/}}
+\makeindex
+
+\lstset{
+    basicstyle=\footnotesize,
+    morekeywords={either,or,transform,rule,to,from,through,function},
+    frame=L,
+}
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+\begin{document}
+
+\hypersetup{backref,pdfpagemode=FullScreen,colorlinks=true}
+
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{4cm}
+    \textbf{\Large{Resolução Automatizada de Problemas Difíceis \\ em Ambientes Heterogêneos: \\ Uma Abordagem baseada em \\ Combinação, Sintonia Fina e Adaptação}}\\
+
+    \vskip 1cm
+
+    \textsc{Projeto de Pesquisa para Doutorado Direto}
+
+    \vskip 3cm
+
+    \begin{minipage}{.4\linewidth}
+        \begin{flushleft}
+            \emph{Autor}: \\Pedro \textsc{Bruel}\\
+            pedro.bruel@gmail.com
+        \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{.4\linewidth}
+        \begin{flushright}
+            \emph{Orientador}: \\Prof. Dr. Alfredo \textsc{Goldman}\\
+            gold@ime.usp.br
+        \end{flushright}
+    \end{minipage}
+
+    \vskip 1cm
+
+    \normalsize{\emph{DCC - IME\\
+    Universidade de São Paulo}\\}
+
+    % Correct Line width for this document:
+    %\begin{abstract}
+    %\rule{\linewidth}{.1mm} \\
+    %\rule{\linewidth}{.1mm} \\
+    %\end{abstract}
+
+    \vfill
+    \normalsize{São Paulo, \today}
+\end{center}
+
+\newpage
+
+\section{Introdução} \label{sec:intro}
+
+Apenas um teste.
+
+%\newpage
+%\bibliographystyle{plainnat}
+%\bibliography{projeto}
+
+\end{document}
