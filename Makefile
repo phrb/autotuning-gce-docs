@@ -1,9 +1,8 @@
-BASE_NAME = relatorio
+BASE_NAME = adapt_submission
 
 LATEX     = latex
 PDFLATEX  = pdflatex
 BIBTEX    = bibtex
-MAKEINDEX = makeindex
 
 pdf: $(BASE_NAME).pdf
 ps: $(BASE_NAME).ps
@@ -11,7 +10,6 @@ ps: $(BASE_NAME).ps
 $(BASE_NAME).pdf: $(BASE_NAME).tex 
 	$(PDFLATEX) $<
 	$(BIBTEX) $(BASE_NAME)
-	$(MAKEINDEX) $(BASE_NAME) 
 	$(PDFLATEX) $< 
 	$(PDFLATEX) $<
 	$(PDFLATEX) $<
@@ -19,7 +17,6 @@ $(BASE_NAME).pdf: $(BASE_NAME).tex
 $(BASE_NAME).ps: $(BASE_NAME).tex 
 	$(LATEX) $<
 	$(BIBTEX) $(BASE_NAME) 
-	$(MAKEINDEX) $(BASE_NAME) 
 	$(LATEX) $< 
 	$(LATEX) $<
 	$(LATEX) $<
