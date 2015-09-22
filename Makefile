@@ -1,18 +1,18 @@
-BASE_NAME = adapt_submission
+BASE_NAME = relatorio
 
 LATEX     = latex
-PDFLATEX  = pdflatex
+PDFLATEX  = xelatex
 BIBTEX    = bibtex
 
 pdf: $(BASE_NAME).pdf
 ps: $(BASE_NAME).ps
 
 $(BASE_NAME).pdf: $(BASE_NAME).tex 
-	$(PDFLATEX) $<
+	$(PDFLATEX) -shell-escape $<
 	$(BIBTEX) $(BASE_NAME)
-	$(PDFLATEX) $< 
-	$(PDFLATEX) $<
-	$(PDFLATEX) $<
+	$(PDFLATEX) -shell-escape $< 
+	$(PDFLATEX) -shell-escape $<
+	$(PDFLATEX) -shell-escape $<
 
 $(BASE_NAME).ps: $(BASE_NAME).tex 
 	$(LATEX) $<
