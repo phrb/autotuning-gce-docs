@@ -158,6 +158,8 @@ best, techniques.
 
 \section{Objectives} \label{sec:obj}
 
+The objectives of this research project are the following
+
 The remaining of this section describes each objective in detail,
 and reports the current state of the research.
 
@@ -181,6 +183,8 @@ It's all about \texttt{\footnotesize process\_all}. Just checking.
     \end{subfigure}%
 \end{figure}
 
+\input{measurement_client}
+
 \subsection{Using the Google Compute Engine} \label{sec:pwork}
 
 Development on the interface with Google Compute Engine
@@ -190,30 +194,7 @@ available\footnote{All code is hosted at GitHub: \\
 \texttt{\scriptsize github.com/phrb/autotuning-gce}}
 under the GNU General Public License.
 
-\begin{listing}[htpb]
-    \begin{minted}[fontsize=\scriptsize]{python}
-#!/usr/bin/env python
-
-import socket
-
-TCP_IP = ''
-TCP_PORT = 8080
-BUFFER_SIZE = 1024
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((TCP_IP, TCP_PORT))
-s.listen(1)
-
-conn, addr = s.accept()
-
-while 1:
-    data = conn.recv(BUFFER_SIZE)
-    if not data: break
-    conn.send(data)
-    \end{minted}
-    \caption{A simple echo server in Python.}
-    \label{fig:server-test-code}
-\end{listing}
+\input{python_tcp}
 
 \section{Experiments} \label{sec:exp}
 
