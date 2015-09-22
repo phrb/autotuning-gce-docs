@@ -25,7 +25,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="291.17024"
+     inkscape:cx="214.90372"
      inkscape:cy="539.33963"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -324,7 +324,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -393,7 +393,7 @@
          y="552.13171"
          x="226.62042"
          sodipodi:role="line"
-         id="tspan20662">Module</tspan></text>
+         id="tspan20662">Driver</tspan></text>
     <rect
        y="506.79938"
        x="291.56699"

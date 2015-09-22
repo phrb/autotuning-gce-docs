@@ -12,7 +12,8 @@ class MeasurementClient(MeasurementDriver):
         super(MeasurementDriver, self).__init__(**kwargs)
         """
         Now, the client will instantiate and 
-        configure the VM Measurement Servers.
+        configure the VM Measurement Servers
+        using the GCE interface.
         """
 
     def process_all(self):
@@ -20,9 +21,9 @@ class MeasurementClient(MeasurementDriver):
         Process all results in the
         database, by sending requests to
         VMs in the cloud and waiting
-        responses.
+        for responses.
         """
     \end{minted}
-    \caption{A simple echo server in Python.}
+    \caption{Proposed modifications to the MeasurementDriver code.}
     \label{fig:measurement-client}
 \end{listing}
