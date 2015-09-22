@@ -91,9 +91,10 @@ Selection Problem is NP-complete when calculating static distributions of
 algorithms in parallel machines.  Guo~\cite{guo2003algorithm} proved the
 problem is undecidable in the general case.
 
-Rice's conceptual framework formed the foundation of autotuners in various
-problem domains.  In 1997, the PHiPAC system~\cite{bilmes1997phipac} used code
-generators and search scripts to automatically generate high performance code
+Rice's conceptual framework~\cite{rice1976algorithm} formed the foundation 
+of autotuners in various problem domains.  In 1997, the PHiPAC 
+system~\cite{bilmes1997phipac} used code generators and search scripts to 
+automatically generate high performance code
 for matrix multiplication. Since then, systems tackled different domains with a
 diversity of strategies. Whaley \emph{et al.}~\cite{whaley1998atlas} introduced
 the ATLAS project, that optimizes dense matrix multiply routines. The
@@ -108,7 +109,7 @@ multi-core architectures.
 Some autotuning systems provide generic tools that enable the implementation of
 autotuners in various domains. PetaBricks~\cite{ansel2009petabricks} is a
 language, compiler and autotuner that introduces abstractions, such as the
-\lq\lq{}\emph{either...or}\rq\rq{} construct, that enable programmers to define
+\texttt{\footnotesize either...or} construct, that enable programmers to define
 multiple algorithms for the same problem.  The ParamILS
 framework~\cite{hutter2009paramils} applies stochastic local search methods
 for algorithm configuration and parameter tuning.  The OpenTuner
