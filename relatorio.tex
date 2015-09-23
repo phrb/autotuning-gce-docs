@@ -46,7 +46,7 @@
 \begin{center}
     \textbf{\Large{Autotuning with Cloud Computing}}\\
 
-    \vspace*{1cm}
+    \vspace*{0.5cm}
 
     \begin{minipage}{.3\linewidth}
         \begin{flushleft}
@@ -67,7 +67,7 @@
         \end{flushright}
     \end{minipage}
 
-    \vskip 1cm
+    \vskip 0.5cm
 
     \normalsize{Instituto de Matemática e Estatística (IME)\\
                 Universidade de São Paulo (USP)\\
@@ -76,7 +76,13 @@
 \end{center}
 
 \begin{abstract}
-    Test.
+This research project presents a proposal for a conference paper.
+The objective is to extend the OpenTuner autotuning framework to
+leverage cloud computing resources from the Google Compute Engine.
+A review of the autotuning research area is presented
+to support the novelty of the proposal.
+The objectives are discussed in detail, and a research schedule is
+presented.
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
@@ -94,7 +100,7 @@ problem.
 
 \begin{figure}[htpb]
     \centering
-    \includegraphics[scale=.56]{algorithm-selection}
+    \includegraphics[scale=.5]{algorithm-selection}
     \caption{Rice's Algorithm Selection Framework~\cite{rice1976algorithm}.}
     \label{fig:asf}
 \end{figure}
@@ -156,8 +162,12 @@ OpenTuner to implement a domain specific language for data-flow
 programming~\cite{bosboom2014streamjit} and a framework for recursive parallel
 algorithm optimization~\cite{eliahu2015frpa}.
 
-% Write a paragraph for this.
-Gupta~\cite{gupta2012exploring,gupta2014evaluating}.
+In a progression of papers~\cite{gupta2012exploring,gupta2014evaluating,gupta2013hpccloud},
+Gupta \emph{et. al} provide experimental evaluations of the application of
+cloud computing to high performance computing, describing which kind of
+applications has the greatest potential to benefit from cloud computing.
+Their work highlights small and medium scale projects as the main beneficiaries
+of cloud computing resources.
 
 \subsection{OpenTuner} \label{sec:opt}
 
@@ -174,7 +184,7 @@ application can implement its own search techniques and meta-techniques.
 
 \begin{figure}[htpb]
     \centering
-    \includegraphics[scale=.75]{opentuner-implementation}
+    \includegraphics[scale=.62]{opentuner-implementation}
     \caption{Simplified OpenTuner Architecture.}
     \label{fig:ot-imp}
 \end{figure}
@@ -246,7 +256,7 @@ the measurement.
     \centering
     \begin{subfigure}{.45\textwidth}
         \centering
-        \includegraphics[scale=.75]{high-level-implementation}
+        \includegraphics[scale=.62]{high-level-implementation}
         \caption{A high-level view of the proposed architecture.
         Green boxes represent unmodified modules, blue boxes represent
         new or modified modules.}
@@ -255,7 +265,7 @@ the measurement.
     \hfill
     \begin{subfigure}{.45\textwidth}
         \centering
-        \includegraphics[scale=.75]{low-level-implementation}
+        \includegraphics[scale=.62]{low-level-implementation}
         \caption{A lower-level view of the proposed architecture,
         Illustrating the communication between server and client,
         mediated by the Google Compute Engine API.
@@ -303,6 +313,49 @@ the MIT License.
 
 \subsection{Normalizing the Results}
 
+The autotuner will optimize programs for a machine that will
+typically have an architectural specification different
+from the machines in the cloud. A normalization technique
+must be devised that enables the results found in the
+virtual machines to be valid for the local machine.
+Four preliminary approaches to this problem are discussed
+in the following.
+
+\subsubsection{Use OpenTuner to Model Performance}
+
+Another autotuner could be used to optimize parameters
+of a simple performance model, that would associate
+a configuration's measurement and the virtual machine
+that produced it with a conversion function. This function
+should map the performance result to the target architecture,
+producing a result that is valid for it.
+
+\subsubsection{Compose Ensembles of Virtual Machines}
+
+The cloud application could be composed of virtual machines
+with different architectures. The final performance measurement
+for a configuration would then be built from the results obtained
+in these different virtual machines.
+
+\subsubsection{Simulate the Target Architecture}
+
+An architecture simulator can be used to model the architecture
+of the target machine. These simulators are usually proprietary
+software, but recent work by Sanchez \emph{et. al}~\cite{sanchez2013zsim}
+presented \emph{zsim}, a simulator for multi-core architectures 
+available\footnote{Hosted at GitHub: \texttt{\scriptsize https://github.com/s5z/zsim}}
+under the GNU General Public License.
+Using a simulator would solve the normalization problem, but factors
+such as the system's accuracy, building process and performance
+could make this approach infeasible.
+
+\subsubsection{Run the Autotuner in the Cloud}
+
+Finally, the normalization problem could be ignored, at least
+in initial research steps, by also running the \lq{}\lq{}local
+machine\rq{}\rq{} using a virtual machine with identical architecture 
+to the others in the cloud.
+
 \subsection{Using the Google Compute Engine} \label{sec:pwork}
 
 Simple experiments with GCE have been performed. A project
@@ -326,6 +379,18 @@ under the GNU General Public License.
 
 \section{Experiments} \label{sec:exp}
 
+A benchmark of applications will be composed to compare the performance of
+the OpenTuner framework with and without the proposed modifications.
+An ideal benchmark would comprise the applications used to validate
+OpenTuner~\cite{ansel2014opentuner}.
+The normalization techniques devised for the results from virtual machines
+will be compared using the same benchmark.
+
+We expect that the experiments provide insight into the situations
+when using cloud computing resources for autotuning is beneficial,
+and into the application and efficiency of the result normalization
+techniques.
+
 \section{Research Schedule} \label{sec:sched}
 
 Table~\ref{tab:sched} presents a first version of the research schedule
@@ -339,7 +404,7 @@ predicted to be harder are assigned to longer time frames.
 
 \begin{table}[htpb]
     \centering
-    \small
+    \scriptsize
     \begin{tabular}{@{}KKKK@{}}
         \toprule
         \specialcell{\bf AP2 \& PR \\ \bf 25/09} & \specialcell{\bf AR1 \\ \bf 16/10} & \specialcell{\bf AP3 \& AR2 \\ \bf 13/11} & \specialcell{\bf AR3 \\ \bf 25/11} \\ \midrule
@@ -349,7 +414,7 @@ predicted to be harder are assigned to longer time frames.
             \footnotesize High and low-level views of the implementation.}
             & \specialcell{ \footnotesize First version of the paper. \\[0.15cm]
             \footnotesize Measurement Client implementation. \\[0.15cm]
-            \footnotesize Result normalization technique. \\[0.15cm]
+            \footnotesize Result normalization techniques. \\[0.15cm]
             \footnotesize GCE Interface implementation.}
             & \specialcell{ \footnotesize Second version of the paper. \\[0.15cm]
             \footnotesize 20-minute presentation. \\[0.15cm]
