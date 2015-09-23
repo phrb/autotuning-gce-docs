@@ -1,5 +1,7 @@
 BASE_NAME = relatorio
 
+FILES     = *.tex img/*.pdf
+
 LATEX     = latex
 PDFLATEX  = xelatex
 BIBTEX    = bibtex

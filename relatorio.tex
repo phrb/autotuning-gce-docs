@@ -15,10 +15,12 @@
 \usepackage{subcaption}
 \usepackage{float}
 \usepackage{a4wide}
+\usepackage{array}
 \usepackage{multicol}
 \usepackage[table]{xcolor}
 \usepackage{makeidx}
 \usepackage{hyperref}
+\usepackage{booktabs}
 \usepackage{setspace}
 \usepackage{minted}
 \usepackage[bottom]{footmisc}
@@ -79,21 +81,56 @@
 
 \section{Introduction} \label{sec:intro}
 
-\section{Related Work} \label{sec:related}
+The program autotuning problem fits in the framework of the Algorithm Selection
+Problem, introduced by Rice in 1976~\cite{rice1976algorithm}. The objective of
+an autotuner is to select the best algorithm, or algorithm configuration, for
+each instance of a problem.  Algorithms or configurations are selected by their
+performance, which is measured by the time to solve the problem instance, the
+accuracy of the solution or the energy consumed.  The set of all possible
+algorithms and configurations that solve a problem define a \emph{search
+space}. Guided by the performance metrics, various optimization techniques
+search this space for the algorithm or configuration that best solves the
+problem.
 
-The Algorithm Selection Problem~\cite{rice1976algorithm} consists in finding a
-\emph{mapping} between \emph{problems} and \emph{algorithms} that minimizes the
-time to solve all instances in a problem set. The algorithms that compose a set
-can represent different abstractions, such as programs, heuristics, or
-configurations. The set of problems usually contains instances of a problem.
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[scale=.56]{algorithm-selection}
+    \caption{Rice's Algorithm Selection Framework~\cite{rice1976algorithm}.}
+    \label{fig:asf}
+\end{figure}
+
+Autotuners can specialize in domains such as matrix
+multiplication~\cite{bilmes1997phipac}, dense~\cite{whaley1998atlas} or
+sparse~\cite{vuduc2005oski} matrix linear algebra, and parallel
+programming~\cite{jordan2012multi}. Other autotuning frameworks provide more
+general tools for the representation and search of program configurations,
+enabling the implementation of autotuners for different problem
+domains~\cite{ansel2014opentuner,hutter2009paramils}.
+
+Figure~\ref{fig:asf} shows the Algorithm Selection Problem framework.
 Bougeret \emph{et al.}~\cite{bougeret2009combining} proved that the Algorithm
 Selection Problem is NP-complete when calculating static distributions of
 algorithms in parallel machines.  Guo~\cite{guo2003algorithm} proved the
 problem is undecidable in the general case.
 
-Rice's conceptual framework~\cite{rice1976algorithm} formed the foundation 
-of autotuners in various problem domains.  In 1997, the PHiPAC 
-system~\cite{bilmes1997phipac} used code generators and search scripts to 
+This research proposal consists in the implementation of an
+extension to the OpenTuner framework~\cite{ansel2014opentuner} that will
+enable it to leverage cloud computing resources.
+The remaining of this document is organized as follows.
+Section~\ref{sec:related} discusses related work and the OpenTuner
+framework.
+Section~\ref{sec:obj} presents a detailed discussion of the objectives
+and reports the current state of the research.
+Section~\ref{sec:exp} discusses the methods and benchmarks that will be used to
+test and validate the implementations.
+Section~\ref{sec:sched} presents a preliminary schedule.
+Section~\ref{sec:conclusion} concludes the proposal.
+
+\section{Related Work} \label{sec:related}
+
+Rice's conceptual framework~\cite{rice1976algorithm} formed the foundation
+of autotuners in various problem domains.  In 1997, the PHiPAC
+system~\cite{bilmes1997phipac} used code generators and search scripts to
 automatically generate high performance code
 for matrix multiplication. Since then, systems tackled different domains with a
 diversity of strategies. Whaley \emph{et al.}~\cite{whaley1998atlas} introduced
@@ -143,10 +180,10 @@ application can implement its own search techniques and meta-techniques.
 \end{figure}
 
 Figure~\ref{fig:ot-imp} shows a high-level view OpenTuner's architecture.
-Measurement and searching are done in separate modules, called drivers, 
-that share results through the database. The search driver requests 
-measurements by registering configurations to the database. The measurement 
-driver reads those configurations and writes back the desired results. 
+Measurement and searching are done in separate modules, called drivers,
+that share results through the database. The search driver requests
+measurements by registering configurations to the database. The measurement
+driver reads those configurations and writes back the desired results.
 Currently, the measurements are performed sequentially.
 
 OpenTuner implements optimization techniques such as the
@@ -164,8 +201,8 @@ The objectives of this research project are the following:
 
 \begin{itemize}
     \item Implement an extension to the OpenTuner measurement driver,
-        the \emph{MeasurementClient}, that requests virtual 
-        machines in the Google Compute Engine to produce 
+        the \emph{MeasurementClient}, that requests virtual
+        machines in the Google Compute Engine to produce
         measurements of configurations;
     \item Implement a \emph{MeasurementServer} that runs
         in the virtual machines. The server receives
@@ -178,7 +215,7 @@ The objectives of this research project are the following:
         OpenTuner~\cite{ansel2014opentuner}.
 \end{itemize}
 
-The remaining of this section describes the implementation objectives in 
+The remaining of this section describes the implementation objectives in
 detail, and reports the current state of the research. Section~\ref{sec:exp}
 describes the performance evaluations and the benchmark.
 
@@ -193,7 +230,7 @@ virtual machines hosted at the Google Compute Engine.
 Figure~\ref{fig:high-level} shows the proposed architecture
 of an OpenTuner application running the measurement
 client and communicating with the measurement servers.
-Green boxes in the figure represent OpenTuner modules 
+Green boxes in the figure represent OpenTuner modules
 that will not be modified, and blue boxes represent
 new or modified modules.
 
@@ -231,7 +268,7 @@ the measurement.
 \end{figure}
 
 OpenTuner controls the execution flow of an application
-with the \texttt{\footnotesize main} function of the 
+with the \texttt{\footnotesize main} function of the
 \texttt{\footnotesize TuningRunMain} class. This function
 calls the \texttt{\footnotesize main} function of the
 search driver, which runs the main loop of an OpenTuner
@@ -249,9 +286,9 @@ process results with the Google Compute Engine.
 
 During its initialization, the measurement client will
 initialize and configure the virtual machines, storing
-each measurement server's IP in the GCE interface. 
-When the search driver requests for results, 
-the \texttt{\footnotesize process\_all} function will route 
+each measurement server's IP in the GCE interface.
+When the search driver requests for results,
+the \texttt{\footnotesize process\_all} function will route
 the requests to the servers via the GCE interface.
 The interface will call the appropriate GCE Python API
 functions to send requests to the servers, and will wait
@@ -275,8 +312,8 @@ configuring firewall access rules, configuring virtual machines
 with a startup script and obtaining a virtual machine's IP.
 
 Each virtual machine is setup and starts running a simple
-Python TCP echo server at the \texttt{\footnotesize 8080} 
-port. Figure~\ref{fig:server-test-code} shows the code for the 
+Python TCP echo server at the \texttt{\footnotesize 8080}
+port. Figure~\ref{fig:server-test-code} shows the code for the
 server.
 
 The utility functions and the measurement server's and client's code
@@ -290,6 +327,40 @@ under the GNU General Public License.
 \section{Experiments} \label{sec:exp}
 
 \section{Research Schedule} \label{sec:sched}
+
+Table~\ref{tab:sched} presents a first version of the research schedule
+following the assignment's delivery dates.
+The schedule spreads the tasks so that portions of the work
+predicted to be harder are assigned to longer time frames.
+
+\newcolumntype{K}{>{\centering\arraybackslash}m{3cm}}
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}K@{}}#2\end{tabular}}
+
+\begin{table}[htpb]
+    \centering
+    \small
+    \begin{tabular}{@{}KKKK@{}}
+        \toprule
+        \specialcell{\bf AP2 \& PR \\ \bf 25/09} & \specialcell{\bf AR1 \\ \bf 16/10} & \specialcell{\bf AP3 \& AR2 \\ \bf 13/11} & \specialcell{\bf AR3 \\ \bf 25/11} \\ \midrule
+        \specialcell{ \footnotesize Paper proposal. \\[0.15cm]
+            \footnotesize 10-minute presentation. \\[0.15cm]
+            \footnotesize Preliminary experiments at GCE. \\[0.15cm]
+            \footnotesize High and low-level views of the implementation.}
+            & \specialcell{ \footnotesize First version of the paper. \\[0.15cm]
+            \footnotesize Measurement Client implementation. \\[0.15cm]
+            \footnotesize Result normalization technique. \\[0.15cm]
+            \footnotesize GCE Interface implementation.}
+            & \specialcell{ \footnotesize Second version of the paper. \\[0.15cm]
+            \footnotesize 20-minute presentation. \\[0.15cm]
+            \footnotesize Measurement Server implementation. \\[0.15cm]
+            \footnotesize Application protocol specification.}
+            & \specialcell{ \footnotesize Final version of the paper. \\[0.15cm]
+            \footnotesize Experiments, results and analysis.} \\ \bottomrule
+    \end{tabular}
+    \caption{Task scheduling for the project.}
+    \label{tab:sched}
+\end{table}
 
 \section{Conclusion} \label{sec:conclusion}
 

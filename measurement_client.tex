@@ -11,9 +11,8 @@ class MeasurementClient(MeasurementDriver):
            **kwargs):
         super(MeasurementDriver, self).__init__(**kwargs)
         """
-        Now, the client will instantiate and 
-        configure the VM Measurement Servers
-        using the GCE interface.
+        Instantiate and configure the VM Measurement 
+        Servers using the GCE interface.
         """
 
     def process_all(self):
@@ -24,6 +23,6 @@ class MeasurementClient(MeasurementDriver):
         for responses.
         """
     \end{minted}
-    \caption{Proposed modifications to the MeasurementDriver code.}
+    \caption{Proposed modifications to \texttt{\footnotesize MeasurementDriver}.}
     \label{fig:measurement-client}
 \end{listing}
