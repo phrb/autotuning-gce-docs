@@ -1,6 +1,3 @@
-%
-% Modelo de relatório/trabalho
-%
 \documentclass[a4paper, 12pt]{article}
 
 \usepackage[english]{babel}
@@ -44,7 +41,7 @@
 
 \thispagestyle{empty}
 \begin{center}
-    \textbf{\Large{Autotuning with Cloud Computing}}\\
+    \textbf{\Large{Program Autotuning with \\ Cloud Computing and OpenTuner}}\\
 
     \vspace*{0.5cm}
 
@@ -163,7 +160,7 @@ programming~\cite{bosboom2014streamjit} and a framework for recursive parallel
 algorithm optimization~\cite{eliahu2015frpa}.
 
 In a progression of papers~\cite{gupta2012exploring,gupta2014evaluating,gupta2013hpccloud},
-Gupta \emph{et. al} provide experimental evaluations of the application of
+Gupta \emph{et al.} provide experimental evaluations of the application of
 cloud computing to high performance computing, describing which kind of
 applications has the greatest potential to benefit from cloud computing.
 Their work highlights small and medium scale projects as the main beneficiaries
@@ -178,9 +175,12 @@ OpenTuner implements ensembles of optimization techniques that
 perform well in different problem domains. The framework uses
 \emph{meta-techniques} to coordinate the distribution of resources
 between techniques.
-Results found during search are shared between techniques through a
+Results found during search are shared through a
 database. An OpenTuner application can implement its own search
 techniques and meta-techniques, making the ensemble more robust.
+The source code is available\footnote{Hosted at GitHub:
+\texttt{\scriptsize github.com/jansel/opentuner}} under the MIT License.
+
 
 \begin{figure}[htpb]
     \centering
@@ -190,20 +190,18 @@ techniques and meta-techniques, making the ensemble more robust.
 \end{figure}
 
 Figure~\ref{fig:ot-imp} shows a high-level view OpenTuner's architecture.
-Measurement and searching are done in separate modules, called drivers,
-that share results through the database. The search driver requests
-measurements by registering configurations to the database. The measurement
-driver reads those configurations and writes back the desired results.
-Currently, the measurements are performed sequentially.
+Measurement and searching are done in separate modules, whose main classes are
+called \emph{drivers}. The search driver requests measurements by registering
+configurations to the database. The measurement driver reads those
+configurations and writes back the desired results.  Currently, the
+measurements are performed sequentially.
 
 OpenTuner implements optimization techniques such as the
-Nelder-Mead~\cite{nelder1965simplex} simplex
-method and Simulated Annealing~\cite{kirkpatrick1983optimization}.
-OpenTuner implements a resource sharing mechanism that aims to take
-advantage of the strengths of each technique. A meta-technique
-must balance the exploitation of a technique that has produced
-good results in the past and the exploration of new, and possibly
-best, techniques.
+Nelder-Mead~\cite{nelder1965simplex} simplex method and Simulated
+Annealing~\cite{kirkpatrick1983optimization}. A resource sharing mechanism,
+called \emph{meta-technique}, aims to take advantage of the strengths of each
+technique by balancing the exploitation of a technique that has produced good
+results in the past and the exploration of unused and possibly better ones.
 
 \section{Objectives} \label{sec:obj}
 
@@ -218,11 +216,14 @@ The objectives of this research project are the following:
         in the virtual machines. The server receives
         requests for results, computes them, and send
         them to the client;
+    \item Implement a Google Compute Engine Interface,
+        to manage the communication between \emph{MeasurementClient}
+        and \emph{MeasurementServer};
+    \item Define an application protocol;
     \item Normalize the results obtained from virtual machines
         to the local machine;
     \item Evaluate the performance of the implementation,
-        using the benchmark applications provided with
-        OpenTuner~\cite{ansel2014opentuner}.
+        using the benchmark that validated OpenTuner~\cite{ansel2014opentuner}.
 \end{itemize}
 
 The remaining of this section describes the implementation objectives in
@@ -231,26 +232,10 @@ describes the performance evaluations and the benchmark.
 
 \subsection{Measurement Server and Client}
 
-The interactions between the local and virtual machines
-will follow the client-server model. The local machine
-will run a measurement client, that will request
-results from various measurement servers running in
-virtual machines hosted at the Google Compute Engine.
-
-Figure~\ref{fig:high-level} shows the proposed architecture
-of an OpenTuner application running the measurement
-client and communicating with the measurement servers.
-Green boxes in the figure represent OpenTuner modules
-that will not be modified, and blue boxes represent
-new or modified modules.
-
-Figure~\ref{fig:low-level} shows, on a lower level
-of abstraction, the interactions between the measurement
-client and servers. A simple application protocol
-will be devised to mediate the requests and responses.
-The configurations will be sent to the server, that
-will run the correspondent program and respond with
-the measurement.
+The interactions between the local and virtual machines will follow the
+client-server model. The local machine will run a measurement client, that will
+request results from various measurement servers running in virtual machines
+hosted at the Google Compute Engine.
 
 \begin{figure}[htpb]
     \centering
@@ -277,123 +262,119 @@ the measurement.
     \label{fig:archs}
 \end{figure}
 
-OpenTuner controls the execution flow of an application
-with the \texttt{\footnotesize main} function of the
-\texttt{\footnotesize TuningRunMain} class. This function
-calls the \texttt{\footnotesize main} function of the
-search driver, which runs the main loop of an OpenTuner
-application. The search driver generates configurations
-to be tested and saves them to the database. It them calls
-the \texttt{\footnotesize process\_all} function of the
-measurement driver and blocks until the function returns.
+Figure~\ref{fig:high-level} shows the proposed architecture of an OpenTuner
+application running the measurement client and communicating with the
+measurement servers.  Green boxes in the figure represent OpenTuner modules
+that will not be modified, and blue boxes represent new or modified modules.
 
-The measurement driver is able to compile programs in parallel,
-but the measurements are done sequentially.
-Listing~\ref{fig:measurement-client} shows the functions of
-the measurement driver that will have to be modified for the
-\texttt{\footnotesize MeasurementClient} to be able to
-process results with the Google Compute Engine.
+Figure~\ref{fig:low-level} shows, on a lower level of abstraction, the
+interactions between the measurement client and servers. A Google Compute
+Engine interface and a simple application protocol will be devised to mediate
+the requests and responses.  The configurations will be sent to the server,
+that will run the correspondent program and respond with the measurement.
 
-During its initialization, the measurement client will
-initialize and configure the virtual machines, storing
-each measurement server's IP in the GCE interface.
-When the search driver requests for results,
-the \texttt{\footnotesize process\_all} function will route
-the requests to the servers via the GCE interface.
-The interface will call the appropriate GCE Python API
-functions to send requests to the servers, and will wait
-for their responses.
-
-The OpenTuner source code is
-available\footnote{The code is hosted at GitHub:
-\texttt{\scriptsize github.com/jansel/opentuner}} under
-the MIT License.
+OpenTuner controls the execution flow of an application with the
+\texttt{\footnotesize main} function of the \texttt{\footnotesize
+TuningRunMain} class. This function sets up the database and the search and
+measurement modules. It then calls the \texttt{\footnotesize main}
+function of the search driver, which runs the main loop of the application.
+The search driver generates configurations to be tested and saves
+them to the database. It then calls the \texttt{\footnotesize process\_all}
+function of the measurement driver and blocks until the function returns.
 
 \input{measurement_client}
 
+The \texttt{\footnotesize process\_all} function is able to compile programs in
+parallel, but the measurements are done sequentially.
+Listing~\ref{fig:measurement-client} shows the functions of the measurement
+driver that will be modified to enable the \texttt{\footnotesize
+MeasurementClient} to process results with Google Compute Engine resources.
+
+During its initialization the measurement client will initialize and configure
+the virtual machines, storing each measurement server's IP in the GCE
+interface.  When the search driver makes requests for results, the
+\texttt{\footnotesize process\_all} function will route them to the
+servers via the GCE interface.  The interface will call the appropriate GCE
+Python API functions, and wait for the responses.
+
 \subsection{Normalizing the Results}
 
-The autotuner will optimize programs for a machine that will
-typically have an architectural specification different
-from the machines in the cloud. A normalization technique
-must be devised that enables the results found in the
-virtual machines to be valid for the local machine.
-Four preliminary approaches to this problem are discussed
-in the following.
+The autotuner will optimize programs for a machine that will typically have an
+architectural specification different from the machines in the cloud. A
+normalization technique must be devised that enables the results found in the
+virtual machines to be valid for the local machine.  Four preliminary
+approaches to this problem are discussed in the following. The best approach
+will be experimentally determined, and could be combination of the approaches
+described here.
 
 \subsubsection{Use OpenTuner to Model Performance}
 
-Another autotuner could be used to optimize parameters
-of a simple performance model, that would associate
-a configuration's measurement and the virtual machine
-that produced it with a conversion function. This function
-should map the performance result to the target architecture,
-producing a valid result.
+Another autotuner could be implemented to optimize parameters of a simple
+performance model, that would associate a configuration's measurement and the
+virtual machine that produced it with a conversion function that transposes
+performance results to the target architecture.
 
 \subsubsection{Compose Ensembles of Virtual Machines}
 
-The cloud application could be composed of virtual machines
-with different architectures. The final performance measurement
-for a configuration would then be built from the results obtained
-in these different virtual machines.
+The cloud application could be composed of virtual machines with different
+architectures. The final performance measurement for a configuration would be
+built from some combination of the results obtained in these different virtual
+machines.
 
 \subsubsection{Simulate the Target Architecture}
 
-The target machine could be modeled by an architecture
-simulator such as \emph{zsim}~\cite{sanchez2013zsim},
-a simulator for multi-core architectures
-available\footnote{Hosted at GitHub: \texttt{\scriptsize https://github.com/s5z/zsim}}
-under the GNU General Public License.
-Using a simulator would solve the normalization problem but introduce
-other problems, such as the simulator's accuracy and performance.
+The target machine could be modeled by an architecture simulator such as
+\emph{zsim}~\cite{sanchez2013zsim}, a simulator for multi-core architectures
+available\footnote{Hosted at GitHub: \texttt{\scriptsize
+https://github.com/s5z/zsim}} under the GNU General Public License.  Using a
+simulator would solve the normalization problem but introduce other problems,
+such as the simulator's accuracy and performance.
 
 \subsubsection{Run the Autotuner in the Cloud}
 
-Finally, the normalization problem could be sidestepped, at least
-in initial research, by running the servers and clients in the cloud
-using the same kind of virtual machine.
+Finally, the normalization problem could be sidestepped, at least in initial
+stages of research, by running the servers and clients in the cloud using
+the same kind of virtual machine.
 
 \subsection{Using the Google Compute Engine} \label{sec:pwork}
 
-Simple experiments with GCE have been performed. A project
-was started and utility functions were implemented.
-The utilities include adding and removing virtual machines,
-configuring firewall access rules, configuring virtual machines
-with a startup script and obtaining a virtual machine's IP.
+Simple experiments with the Google Compute Engine have been performed. A
+project was started and utility functions were implemented, such as
+adding and removing virtual machines, configuring firewall access
+rules, configuring virtual machines with a startup script and obtaining a
+virtual machine's IP.
 
-Each virtual machine is setup and starts running a simple
-Python TCP echo server at the \texttt{\footnotesize 8080}
-port. Figure~\ref{fig:server-test-code} shows the code for the
-server.
+For testing purposes, each virtual machine is setup with a \emph{Debian 7}
+image and starts running a simple Python TCP echo server at the
+\texttt{\footnotesize 8080} port.  Listing~\ref{fig:server-test-code} shows the
+code for the server.
 
-The utility functions and the measurement server's and client's code
-are available\footnote{All code is hosted at GitHub: \\
-\texttt{\scriptsize github.com/phrb/measurement-server} \\
-\texttt{\scriptsize github.com/phrb/autotuning-gce}}
-under the GNU General Public License.
+The utility functions and the measurement server's and client's code are
+available\footnote{All code is hosted at GitHub: \\ \texttt{\scriptsize
+github.com/phrb/measurement-server} \\ \texttt{\scriptsize
+github.com/phrb/autotuning-gce}} under the GNU General Public License.
 
 \input{python_tcp}
 
 \section{Experiments} \label{sec:exp}
 
-A benchmark of applications will be composed to compare the performance of
-the OpenTuner framework with and without the proposed modifications.
-An ideal benchmark would comprise the applications used to validate
-OpenTuner~\cite{ansel2014opentuner}.
-The normalization techniques devised for the results from virtual machines
-will be compared using the same benchmark.
+A benchmark of applications will be composed to compare the performance of the
+OpenTuner framework with and without the proposed modifications.  An ideal
+benchmark would comprise the applications used to validate
+OpenTuner~\cite{ansel2014opentuner}.  The normalization techniques devised for
+the results from virtual machines will be compared using the same benchmark.
 
-We expect that the experiments provide insight into the situations
-when using cloud computing resources for autotuning is beneficial,
-and into the application and efficiency of the result normalization
-techniques.
+We expect that the experiments provide insight into the situations when using
+cloud computing resources for autotuning is beneficial, and into the
+application and efficiency of the result normalization techniques.
 
 \section{Research Schedule} \label{sec:sched}
 
 Table~\ref{tab:sched} presents a first version of the research schedule
-following the assignment's delivery dates.
-The schedule spreads the tasks so that portions of the work
-predicted to be harder are assigned to longer time frames.
+following the assignment's delivery dates.  The schedule spreads the tasks so
+that portions of the work predicted to be harder are assigned to longer time
+frames.  The delivery dates for harder tasks are also assigned to later in the
+project's timeline.
 
 \newcolumntype{K}{>{\centering\arraybackslash}m{3cm}}
 \newcommand{\specialcell}[2][c]{%
@@ -411,12 +392,13 @@ predicted to be harder are assigned to longer time frames.
             \footnotesize High and low-level views of the implementation.}
             & \specialcell{ \footnotesize First version of the paper. \\[0.15cm]
             \footnotesize Measurement Client implementation. \\[0.15cm]
-            \footnotesize Result normalization techniques. \\[0.15cm]
-            \footnotesize GCE Interface implementation.}
+            \footnotesize GCE Interface implementation. \\[0.15cm]
+            \footnotesize Measurement Server implementation.}
             & \specialcell{ \footnotesize Second version of the paper. \\[0.15cm]
             \footnotesize 20-minute presentation. \\[0.15cm]
-            \footnotesize Measurement Server implementation. \\[0.15cm]
-            \footnotesize Application protocol specification.}
+            \footnotesize Result normalization techniques. \\[0.15cm]
+            \footnotesize Benchmark choice. \\[0.15cm]
+            \footnotesize Application protocol full specification.}
             & \specialcell{ \footnotesize Final version of the paper. \\[0.15cm]
             \footnotesize Experiments, results and analysis.} \\ \bottomrule
     \end{tabular}
@@ -425,6 +407,18 @@ predicted to be harder are assigned to longer time frames.
 \end{table}
 
 \section{Conclusion} \label{sec:conclusion}
+
+This proposal presented a research project aiming to extend the
+OpenTuner autotuning framework enabling it to leverage the cloud computing
+resources from Google Compute Engine. We believe that distributing
+measurements in the cloud will considerably speedup autotuning for every
+problem domain.
+We propose four approaches to solve the result normalization problem
+which would enable transposing the results obtained in virtual machines
+to a local machine.
+The benchmark for the experiments will be detailed during the development
+of the research. It will be composed preferably by problems that evidence
+strengths and weaknesses of the cloud environment.
 
 \bibliographystyle{plainnat}
 \bibliography{ref}
