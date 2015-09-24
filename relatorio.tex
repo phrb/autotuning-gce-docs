@@ -78,11 +78,11 @@
 \begin{abstract}
 This research project presents a proposal for a conference paper.
 The objective is to extend the OpenTuner autotuning framework to
-leverage cloud computing resources from the Google Compute Engine.
-A review of the autotuning research area is presented
-to support the novelty of the proposal.
-The objectives are discussed in detail, and a research schedule is
-presented.
+leverage the cloud computing resources from Google Compute Engine.
+An overview of the autotuning research area is presented,
+supporting the novelty and contribution potential of this proposal.
+The objectives and current work are discussed in detail, and a research
+schedule is presented.
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
@@ -90,13 +90,13 @@ presented.
 The program autotuning problem fits in the framework of the Algorithm Selection
 Problem, introduced by Rice in 1976~\cite{rice1976algorithm}. The objective of
 an autotuner is to select the best algorithm, or algorithm configuration, for
-each instance of a problem.  Algorithms or configurations are selected by their
-performance, which is measured by the time to solve the problem instance, the
-accuracy of the solution or the energy consumed.  The set of all possible
-algorithms and configurations that solve a problem define a \emph{search
-space}. Guided by the performance metrics, various optimization techniques
-search this space for the algorithm or configuration that best solves the
-problem.
+each instance of a problem.  Algorithms or configurations are selected
+according to performance metrics such as the time to solve the problem
+instance, the accuracy of the solution and the energy consumed.  The set of all
+possible algorithms and configurations that solve a problem define a
+\emph{search space}. Guided by the performance metrics, various optimization
+techniques search this space for the algorithm or configuration that best
+solves the problem.
 
 \begin{figure}[htpb]
     \centering
@@ -171,16 +171,16 @@ of cloud computing resources.
 
 \subsection{OpenTuner} \label{sec:opt}
 
-OpenTuner search spaces are defined by \emph{Configurations}, composed of
-different \emph{Parameter} types. Each type has restricted bounds, and
-implements its own manipulation functions, enabling the exploration of the
-search space.  OpenTuner implements ensembles of optimization
-techniques that perform well in different problem domains.
-
-Results found during the search process are shared between techniques through a
-common database. OpenTuner uses \emph{meta-techniques} for coordinating
-the distribution of resources between techniques. An OpenTuner
-application can implement its own search techniques and meta-techniques.
+OpenTuner search spaces are defined by \emph{Configurations}, that are composed
+of \emph{Parameter} of various types. Each type has restricted bounds and
+manipulation functions that enable the exploration of the search space.
+OpenTuner implements ensembles of optimization techniques that
+perform well in different problem domains. The framework uses
+\emph{meta-techniques} to coordinate the distribution of resources
+between techniques.
+Results found during search are shared between techniques through a
+database. An OpenTuner application can implement its own search
+techniques and meta-techniques, making the ensemble more robust.
 
 \begin{figure}[htpb]
     \centering
@@ -328,7 +328,7 @@ of a simple performance model, that would associate
 a configuration's measurement and the virtual machine
 that produced it with a conversion function. This function
 should map the performance result to the target architecture,
-producing a result that is valid for it.
+producing a valid result.
 
 \subsubsection{Compose Ensembles of Virtual Machines}
 
@@ -339,22 +339,19 @@ in these different virtual machines.
 
 \subsubsection{Simulate the Target Architecture}
 
-An architecture simulator can be used to model the architecture
-of the target machine. These simulators are usually proprietary
-software, but recent work by Sanchez \emph{et. al}~\cite{sanchez2013zsim}
-presented \emph{zsim}, a simulator for multi-core architectures 
+The target machine could be modeled by an architecture
+simulator such as \emph{zsim}~\cite{sanchez2013zsim},
+a simulator for multi-core architectures
 available\footnote{Hosted at GitHub: \texttt{\scriptsize https://github.com/s5z/zsim}}
 under the GNU General Public License.
-Using a simulator would solve the normalization problem, but factors
-such as the system's accuracy, building process and performance
-could make this approach infeasible.
+Using a simulator would solve the normalization problem but introduce
+other problems, such as the simulator's accuracy and performance.
 
 \subsubsection{Run the Autotuner in the Cloud}
 
-Finally, the normalization problem could be ignored, at least
-in initial research steps, by also running the \lq{}\lq{}local
-machine\rq{}\rq{} using a virtual machine with identical architecture 
-to the others in the cloud.
+Finally, the normalization problem could be sidestepped, at least
+in initial research, by running the servers and clients in the cloud
+using the same kind of virtual machine.
 
 \subsection{Using the Google Compute Engine} \label{sec:pwork}
 
