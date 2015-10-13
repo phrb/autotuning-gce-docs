@@ -1,5 +1,6 @@
 \documentclass[a4paper, 12pt]{article}
 
+\usepackage{sbc-template}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -9,7 +10,6 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{subcaption}
 \usepackage{float}
 \usepackage{a4wide}
 \usepackage{array}
@@ -237,30 +237,30 @@ client-server model. The local machine will run a measurement client, that will
 request results from various measurement servers running in virtual machines
 hosted at the Google Compute Engine.
 
-\begin{figure}[htpb]
-    \centering
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \includegraphics[scale=.62]{high-level-implementation}
-        \caption{A high-level view of the proposed architecture.
-        Green boxes represent unmodified modules, blue boxes represent
-        new or modified modules.}
-        \label{fig:high-level}
-    \end{subfigure}%
-    \hfill
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \includegraphics[scale=.62]{low-level-implementation}
-        \caption{A lower-level view of the proposed architecture,
-        Illustrating the communication between server and client,
-        mediated by the Google Compute Engine API.
-        }
-        \label{fig:low-level}
-    \end{subfigure}%
-    \caption{Proposed OpenTuner Architecture,
-    using the Google Compute Engine (GCE) API.}
-    \label{fig:archs}
-\end{figure}
+%\begin{figure}[htpb]
+%    \centering
+%    \begin{subfigure}{.45\textwidth}
+%        \centering
+%        \includegraphics[scale=.62]{high-level-implementation}
+%        \caption{A high-level view of the proposed architecture.
+%        Green boxes represent unmodified modules, blue boxes represent
+%        new or modified modules.}
+%        \label{fig:high-level}
+%    \end{subfigure}%
+%    \hfill
+%    \begin{subfigure}{.45\textwidth}
+%        \centering
+%        \includegraphics[scale=.62]{low-level-implementation}
+%        \caption{A lower-level view of the proposed architecture,
+%        Illustrating the communication between server and client,
+%        mediated by the Google Compute Engine API.
+%        }
+%        \label{fig:low-level}
+%    \end{subfigure}%
+%    \caption{Proposed OpenTuner Architecture,
+%    using the Google Compute Engine (GCE) API.}
+%    \label{fig:archs}
+    %\end{figure}
 
 Figure~\ref{fig:high-level} shows the proposed architecture of an OpenTuner
 application running the measurement client and communicating with the
@@ -420,7 +420,7 @@ The benchmark for the experiments will be detailed during the development
 of the research. It will be composed preferably by problems that evidence
 strengths and weaknesses of the cloud environment.
 
-\bibliographystyle{plainnat}
-\bibliography{ref}
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,ref}
 
 \end{document}
