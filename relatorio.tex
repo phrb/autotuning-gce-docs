@@ -79,7 +79,7 @@
     in a local machine.
     This paper presents an extension to the OpenTuner measurement driver,
     enabling it to leverage cloud computing resources
-    from the Google Compute Engine. We compare the performance of
+    from the Google Compute Engine (GCE). We compare the performance of
     our implementation using a diverse benchmark.
 \end{abstract}
 
@@ -105,12 +105,12 @@ enabling the implementation of autotuners for different problem
 domains~\cite{ansel2014opentuner,hutter2009paramils}.
 
 The main contribution of this paper is the implementation of an
-extension to the OpenTuner framework~\cite{ansel2014opentuner} that 
-enables it to leverage cloud computing resources. 
-The interactions between the local and virtual machines follows 
+extension to the OpenTuner framework~\cite{ansel2014opentuner} that
+enables it to leverage cloud computing resources.
+The interactions between the local and virtual machines follows
 the client-server model. The local machine runs a measurement client that
 requests results from various measurement servers running in virtual machines
-hosted at the Google Compute Engine.
+hosted at the Google Compute Engine (GCE).
 We compare the performance of our extension with the
 unmodified framework in a diverse benchmark of applications, identifying
 the problem domains that benefit from this cloud-based approach.
@@ -119,14 +119,14 @@ The rest of the paper is organized as follows.
 Section~\ref{sec:related} discusses related work.
 Section~\ref{sec:ot} discusses the architecture of the OpenTuner framework.
 Section~\ref{sec:ext} presents the architecture of the measurement driver
-extension, the Google Compute Engine interface and the application protocol
+extension, the GCE interface and the application protocol
 that mediates the interactions between \emph{MeasurementClient} and
 \emph{MeasurementServer}s.
 Section~\ref{sec:norm} discusses the result normalization strategies.
-Section~\ref{sec:exp} describes the experiments performed and the 
+Section~\ref{sec:exp} describes the experiments performed and the
 applications used in the benchmark.
-Section~\ref{sec:results} presents a preliminary schedule.
-Section~\ref{sec:conclusion} concludes the proposal.
+Section~\ref{sec:results} discusses the results.
+Section~\ref{sec:conclusion} concludes.
 
 \section{Related Work} \label{sec:related}
 
@@ -165,7 +165,7 @@ applications has the greatest potential to benefit from cloud computing.
 Their work highlights small and medium scale projects as the main beneficiaries
 of cloud computing resources.
 
-\section{OpenTuner} \label{sec:opt}
+\section{OpenTuner} \label{sec:ot}
 
 OpenTuner search spaces are defined by \emph{Configurations}, that are composed
 of \emph{Parameter} of various types. Each type has restricted bounds and
@@ -204,107 +204,94 @@ results in the past and the exploration of unused and possibly better ones.
 \section{Measurement Server and Client}
 \label{sec:ext}
 
-The interactions between the local and virtual machines will follow the
-client-server model. The local machine will run a measurement client, that will
-request results from various measurement servers running in virtual machines
-hosted at the Google Compute Engine.
+The interactions between the local \emph{MeasurementClient} and the virtual
+machines' \emph{MeasurementServer}s are mediated by a wrapper of the
+GCE Python API, described in Section~\ref{sec:gce}.
 
-\begin{figure}[htpb]
-    \centering
-    \begin{minipage}{.45\textwidth}
-        \centering
-        \includegraphics[scale=.62]{high-level-implementation}
-        \caption{A high-level view of the proposed architecture.
-        Green boxes represent unmodified modules, blue boxes represent
-        new or modified modules.}
-        \label{fig:high-level}
-    \end{minipage}%
-    \hfill
-    \begin{minipage}{.45\textwidth}
-        \centering
-        \includegraphics[scale=.62]{low-level-implementation}
-        \caption{A lower-level view of the proposed architecture,
-        Illustrating the communication between server and client,
-        mediated by the Google Compute Engine API.
-        }
-        \label{fig:low-level}
-    \end{minipage}%
-    \label{fig:archs}
-\end{figure}
-
-Figure~\ref{fig:high-level} shows the proposed architecture of an OpenTuner
+Figure~\ref{fig:high-level} presents the architecture of an OpenTuner
 application running the measurement client and communicating with the
 measurement servers.  Green boxes in the figure represent OpenTuner modules
 that will not be modified, and blue boxes represent new or modified modules.
 
 Figure~\ref{fig:low-level} shows, on a lower level of abstraction, the
-interactions between the measurement client and servers. A Google Compute
-Engine interface and a simple application protocol will be devised to mediate
-the requests and responses.  The configurations will be sent to the server,
-that will run the correspondent program and respond with the measurement.
+interactions between the measurement client and servers.
+The client sends the program configurations to the servers, who run the
+correspondent program and respond with the measurement.
+
+\begin{figure}[htpb]
+    \centering
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \includegraphics[scale=.58]{high-level-implementation}
+        \caption{A high-level view of the architecture.}
+        \label{fig:high-level}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \includegraphics[scale=.58]{low-level-implementation}
+        \caption{A lower-level view of the architecture.}
+        \label{fig:low-level}
+    \end{minipage}%
+    \label{fig:archs}
+\end{figure}
 
 OpenTuner controls the execution flow of an application with the
 \texttt{\footnotesize main} function of the \texttt{\footnotesize
 TuningRunMain} class. This function sets up the database and the search and
-measurement modules. It then calls the \texttt{\footnotesize main}
-function of the search driver, which runs the main loop of the application.
-The search driver generates configurations to be tested and saves
-them to the database. It then calls the \texttt{\footnotesize process\_all}
-function of the measurement driver and blocks until the function returns.
+measurement modules. It then calls the \texttt{\footnotesize main} function of
+the search driver, which runs the main loop of the application.  The search
+driver generates configurations to be tested and saves them to the database. It
+then calls the \texttt{\footnotesize process\_all} function of the measurement
+driver and blocks until the function returns.
 
 \input{measurement_client}
 
 The \texttt{\footnotesize process\_all} function is able to compile programs in
 parallel, but the measurements are done sequentially.
 Listing~\ref{fig:measurement-client} shows the functions of the measurement
-driver that will be modified to enable the \texttt{\footnotesize
+driver that were modified to enable the \texttt{\footnotesize
 MeasurementClient} to process results with Google Compute Engine resources.
 
-During its initialization the measurement client will initialize and configure
-the virtual machines, storing each measurement server's IP in the GCE
-interface.  When the search driver makes requests for results, the
-\texttt{\footnotesize process\_all} function will route them to the
-servers via the GCE interface.  The interface will call the appropriate GCE
-Python API functions, and wait for the responses.
+During initialization the measurement client uses the GCE interface to start
+and configure virtual machines. The interface stores each measurement
+server's IP.  When the search driver makes requests for results, the
+\texttt{\footnotesize process\_all} function will route them to the servers via
+the GCE interface.  The interface will call the appropriate GCE Python API
+functions, and wait for the responses.
 
-Simple experiments with the Google Compute Engine have been performed. A
-project was started and utility functions were implemented, such as
-adding and removing virtual machines, configuring firewall access
-rules, configuring virtual machines with a startup script and obtaining a
-virtual machine's IP.
+\subsection{GCE Interface}
+\label{sec:gce}
 
 The utility functions and the measurement server's and client's code are
 available\footnote{All code is hosted at GitHub: \\ \texttt{\scriptsize
 github.com/phrb/measurement-server} \\ \texttt{\scriptsize
 github.com/phrb/autotuning-gce}} under the GNU General Public License.
 
-\section{Normalizing the Results}
+\section{Result Normalization}
 \label{sec:norm}
 
-The autotuner will optimize programs for a machine that will typically have an
-architectural specification different from the machines in the cloud. A
+Using a cloud environment, an autotuner will typically optimize programs for
+a machine with a different architecture from the virtual machines. A
 normalization technique must be devised that enables the results found in the
-virtual machines to be valid for the local machine.  Four preliminary
-approaches to this problem are discussed in the following. The best approach
-will be experimentally determined, and could be combination of the approaches
+virtual machines to be valid for the local machine.  We present four
+approaches to this problem. The best approach for each problem domain
+must be experimentally determined, and could be a combination of the approaches
 described here.
 
-\subsubsection{Use OpenTuner to Model Performance}
-
+\paragraph{Autotune Performance Models}
 Another autotuner could be implemented to optimize parameters of a simple
 performance model, that would associate a configuration's measurement and the
 virtual machine that produced it with a conversion function that transposes
 performance results to the target architecture.
 
-\subsubsection{Compose Ensembles of Virtual Machines}
-
+\paragraph{Ensembles of Virtual Machines}
 The cloud application could be composed of virtual machines with different
 architectures. The final performance measurement for a configuration would be
 built from some combination of the results obtained in these different virtual
 machines.
 
-\subsubsection{Simulate the Target Architecture}
-
+\paragraph{Architecture Simulators}
 The target machine could be modeled by an architecture simulator such as
 \emph{zsim}~\cite{sanchez2013zsim}, a simulator for multi-core architectures
 available\footnote{Hosted at GitHub: \texttt{\scriptsize
@@ -312,8 +299,7 @@ https://github.com/s5z/zsim}} under the GNU General Public License.  Using a
 simulator would solve the normalization problem but introduce other problems,
 such as the simulator's accuracy and performance.
 
-\subsubsection{Run the Autotuner in the Cloud}
-
+\paragraph{Autotune in the Cloud}
 Finally, the normalization problem could be sidestepped, at least in initial
 stages of research, by running the servers and clients in the cloud using
 the same kind of virtual machine.
@@ -334,17 +320,12 @@ application and efficiency of the result normalization techniques.
 
 \section{Conclusion} \label{sec:conclusion}
 
-This proposal presented a research project aiming to extend the
+This paper presented an extension of the
 OpenTuner autotuning framework enabling it to leverage the cloud computing
-resources from Google Compute Engine. We believe that distributing
-measurements in the cloud will considerably speedup autotuning for every
-problem domain.
+resources from GCE.
 We propose four approaches to solve the result normalization problem
 which would enable transposing the results obtained in virtual machines
 to a local machine.
-The benchmark for the experiments will be detailed during the development
-of the research. It will be composed preferably by problems that evidence
-strengths and weaknesses of the cloud environment.
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,ref}
