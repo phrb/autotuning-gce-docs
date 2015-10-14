@@ -19,6 +19,7 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{setspace}
+\usepackage[colorinlistoftodos,prependcaption,textsize=footnotesize]{todonotes}
 \usepackage{minted}
 \usepackage[bottom]{footmisc}
 \usepackage[nottoc]{tocbibind}
@@ -81,9 +82,16 @@
     enabling it to leverage cloud computing resources
     from the Google Compute Engine (GCE). We compare the performance of
     our implementation using a diverse benchmark.
+    \todo[inline,author=Pedro]{A very short summary of the results will be
+    provided in the abstract.}
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
+
+\todo[inline,author=Disclaimer]{This is a draft of the paper. The results and
+implementations are not final or completed. Future versions will improve
+the presentation and present results and conclusions. The maximum page count
+for SBRC is 14 pages, and this document is 9 pages long.}
 
 The program autotuning problem fits in the framework of the Algorithm Selection
 Problem, introduced by Rice in 1976~\cite{rice1976algorithm}. The objective of
@@ -96,6 +104,10 @@ possible algorithms and configurations that solve a problem define a
 techniques search this space for the algorithm or configuration that best
 solves the problem.
 
+\todo[inline,author=Pedro]{I removed the Algorithm Selection Problem figure.
+It is marginally relevant for the paper's subject, but not needed to understand
+the contributions and results. Should I re-include it?}
+
 Autotuners can specialize in domains such as matrix
 multiplication~\cite{bilmes1997phipac}, dense~\cite{whaley1998atlas} or
 sparse~\cite{vuduc2005oski} matrix linear algebra, and parallel
@@ -107,13 +119,18 @@ domains~\cite{ansel2014opentuner,hutter2009paramils}.
 The main contribution of this paper is the implementation of an
 extension to the OpenTuner framework~\cite{ansel2014opentuner} that
 enables it to leverage cloud computing resources.
-The interactions between the local and virtual machines follows
-the client-server model. The local machine runs a measurement client that
+The interactions between the local and virtual machines (VM) follows
+the client-server model. The local machine (LM) runs a measurement client that
 requests results from various measurement servers running in virtual machines
 hosted at the Google Compute Engine (GCE).
 We compare the performance of our extension with the
 unmodified framework in a diverse benchmark of applications, identifying
 the problem domains that benefit from this cloud-based approach.
+
+\todo[inline,author=Pedro]{Added hooks for the initials GCE, LM and VM.}
+\todo[inline,author=Pedro]{I used \lq{}leverage\rq{} to implicitly say
+\lq{}potentially speedup the autotuning process\rq{}, but this expression
+will be improved in future revisions.}
 
 The rest of the paper is organized as follows.
 Section~\ref{sec:related} discusses related work.
@@ -204,19 +221,18 @@ results in the past and the exploration of unused and possibly better ones.
 \section{Measurement Server and Client}
 \label{sec:ext}
 
-The interactions between the local \emph{MeasurementClient} and the virtual
-machines' \emph{MeasurementServer}s are mediated by a wrapper of the
-GCE Python API, described in Section~\ref{sec:gce}.
+Following the client-server model, the extension distributes
+measurements of program configurations between a group of virtual
+machines running \emph{MeasurementServer}s in the GCE. The servers
+wait for measurement requests from a client. They maintain copies
+of the program to be autotuned and the user-defined function that
+measures configurations.
 
-Figure~\ref{fig:high-level} presents the architecture of an OpenTuner
-application running the measurement client and communicating with the
-measurement servers.  Green boxes in the figure represent OpenTuner modules
-that will not be modified, and blue boxes represent new or modified modules.
-
-Figure~\ref{fig:low-level} shows, on a lower level of abstraction, the
-interactions between the measurement client and servers.
-The client sends the program configurations to the servers, who run the
-correspondent program and respond with the measurement.
+The machine running the OpenTuner autotuner runs a \emph{MeasurementClient},
+an extension of the native \emph{MeasurementDriver} that, instead of
+compiling and running requests locally, uses the GCE interface to
+route requests to virtual machines and them saves the results to the local
+database.
 
 \begin{figure}[htpb]
     \centering
@@ -246,12 +262,24 @@ then calls the \texttt{\footnotesize process\_all} function of the measurement
 driver and blocks until the function returns.
 
 \input{measurement_client}
+\todo[inline,author=Pedro]{This figure will be substituted by the complete
+implementation if it is short enough. Otherwise the figure will be removed.}
 
 The \texttt{\footnotesize process\_all} function is able to compile programs in
 parallel, but the measurements are done sequentially.
 Listing~\ref{fig:measurement-client} shows the functions of the measurement
 driver that were modified to enable the \texttt{\footnotesize
 MeasurementClient} to process results with Google Compute Engine resources.
+
+Figure~\ref{fig:high-level} presents the architecture of an OpenTuner
+application running the measurement client and communicating with the
+measurement servers.  Green boxes in the figure represent OpenTuner modules
+that will not be modified, and blue boxes represent new or modified modules.
+
+Figure~\ref{fig:low-level} shows, on a lower level of abstraction, the
+interactions between the measurement client and servers.
+The client sends the program configurations to the servers, who run the
+correspondent program and respond with the measurement.
 
 During initialization the measurement client uses the GCE interface to start
 and configure virtual machines. The interface stores each measurement
@@ -263,13 +291,25 @@ functions, and wait for the responses.
 \subsection{GCE Interface}
 \label{sec:gce}
 
+The interactions between the local \emph{MeasurementClient} and the virtual
+machines' \emph{MeasurementServer}s are mediated by a wrapper of the
+GCE Python API, described in Section~\ref{sec:gce}.
+
 The utility functions and the measurement server's and client's code are
 available\footnote{All code is hosted at GitHub: \\ \texttt{\scriptsize
 github.com/phrb/measurement-server} \\ \texttt{\scriptsize
 github.com/phrb/autotuning-gce}} under the GNU General Public License.
 
+\subsection{Application Protocol}
+\label{sec:app}
+
+\todo[inline,author=Pedro]{The application protocol will be described here.}
+
 \section{Result Normalization}
 \label{sec:norm}
+
+\todo[inline,author=Pedro]{This section will discuss the different strategies
+in more depth, and relate them to the experiments performed.}
 
 Using a cloud environment, an autotuner will typically optimize programs for
 a machine with a different architecture from the virtual machines. A
@@ -306,26 +346,20 @@ the same kind of virtual machine.
 
 \section{Experiments} \label{sec:exp}
 
-A benchmark of applications will be composed to compare the performance of the
-OpenTuner framework with and without the proposed modifications.  An ideal
-benchmark would comprise the applications used to validate
-OpenTuner~\cite{ansel2014opentuner}.  The normalization techniques devised for
-the results from virtual machines will be compared using the same benchmark.
-
-We expect that the experiments provide insight into the situations when using
-cloud computing resources for autotuning is beneficial, and into the
-application and efficiency of the result normalization techniques.
+\todo[inline,author=Pedro]{The experimental settings will be described in this
+section.}
 
 \section{Results} \label{sec:results}
 
+\todo[inline,author=Pedro]{This section will present and discuss the results, 
+connecting the findings with normalization techniques and problem domains.}
+
 \section{Conclusion} \label{sec:conclusion}
 
-This paper presented an extension of the
-OpenTuner autotuning framework enabling it to leverage the cloud computing
-resources from GCE.
-We propose four approaches to solve the result normalization problem
-which would enable transposing the results obtained in virtual machines
-to a local machine.
+This paper presented an extension of the OpenTuner autotuning framework
+enabling it to leverage the cloud computing resources from GCE.  We propose
+four approaches to solve the result normalization problem which would enable
+transposing the results obtained in virtual machines to a local machine.
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,ref}
