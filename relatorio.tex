@@ -262,8 +262,8 @@ then calls the \texttt{\footnotesize process\_all} function of the measurement
 driver and blocks until the function returns.
 
 \input{measurement_client}
-\todo[inline,author=Pedro]{This figure will be substituted by the complete
-implementation if it is short enough. Otherwise the figure will be removed.}
+\todo[inline,author=Pedro]{Listing 1 will be replaced by the complete
+implementation if it is short enough. Otherwise it will be removed.}
 
 The \texttt{\footnotesize process\_all} function is able to compile programs in
 parallel, but the measurements are done sequentially.
@@ -290,6 +290,9 @@ functions, and wait for the responses.
 
 \subsection{GCE Interface}
 \label{sec:gce}
+
+\todo[inline,author=Pedro]{This section will describe how the GCE interface
+mediates the result requests and configuration measurements.}
 
 The interactions between the local \emph{MeasurementClient} and the virtual
 machines' \emph{MeasurementServer}s are mediated by a wrapper of the
