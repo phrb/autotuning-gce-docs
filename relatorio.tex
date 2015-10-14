@@ -73,13 +73,14 @@
 \end{center}
 
 \begin{abstract}
-This research project presents a proposal for a conference paper.
-The objective is to extend the OpenTuner autotuning framework to
-leverage the cloud computing resources from Google Compute Engine.
-An overview of the autotuning research area is presented,
-supporting the novelty and contribution potential of this proposal.
-The objectives and current work are discussed in detail, and a research
-schedule is presented.
+    The OpenTuner framework provides domain-agnostic tools for the
+    implementation of autotuners. The optimization results are
+    obtained sequentially by the measurement driver, that runs
+    in a local machine.
+    This paper presents an extension to the OpenTuner measurement driver,
+    enabling it to leverage cloud computing resources
+    from the Google Compute Engine. We compare the performance of
+    our implementation using a diverse benchmark.
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
@@ -95,13 +96,6 @@ possible algorithms and configurations that solve a problem define a
 techniques search this space for the algorithm or configuration that best
 solves the problem.
 
-\begin{figure}[htpb]
-    \centering
-    \includegraphics[scale=.5]{algorithm-selection}
-    \caption{Rice's Algorithm Selection Framework~\cite{rice1976algorithm}.}
-    \label{fig:asf}
-\end{figure}
-
 Autotuners can specialize in domains such as matrix
 multiplication~\cite{bilmes1997phipac}, dense~\cite{whaley1998atlas} or
 sparse~\cite{vuduc2005oski} matrix linear algebra, and parallel
@@ -110,23 +104,28 @@ general tools for the representation and search of program configurations,
 enabling the implementation of autotuners for different problem
 domains~\cite{ansel2014opentuner,hutter2009paramils}.
 
-Figure~\ref{fig:asf} shows the Algorithm Selection Problem framework.
-Bougeret \emph{et al.}~\cite{bougeret2009combining} proved that the Algorithm
-Selection Problem is NP-complete when calculating static distributions of
-algorithms in parallel machines.  Guo~\cite{guo2003algorithm} proved the
-problem is undecidable in the general case.
+The main contribution of this paper is the implementation of an
+extension to the OpenTuner framework~\cite{ansel2014opentuner} that 
+enables it to leverage cloud computing resources. 
+The interactions between the local and virtual machines follows 
+the client-server model. The local machine runs a measurement client that
+requests results from various measurement servers running in virtual machines
+hosted at the Google Compute Engine.
+We compare the performance of our extension with the
+unmodified framework in a diverse benchmark of applications, identifying
+the problem domains that benefit from this cloud-based approach.
 
-This research proposal consists in the implementation of an
-extension to the OpenTuner framework~\cite{ansel2014opentuner} that will
-enable it to leverage cloud computing resources.
-The remaining of this document is organized as follows.
-Section~\ref{sec:related} discusses related work and the OpenTuner
-framework.
-Section~\ref{sec:obj} presents a detailed discussion of the objectives
-and reports the current state of the research.
-Section~\ref{sec:exp} discusses the methods and benchmarks that will be used to
-test and validate the implementations.
-Section~\ref{sec:sched} presents a preliminary schedule.
+The rest of the paper is organized as follows.
+Section~\ref{sec:related} discusses related work.
+Section~\ref{sec:ot} discusses the architecture of the OpenTuner framework.
+Section~\ref{sec:ext} presents the architecture of the measurement driver
+extension, the Google Compute Engine interface and the application protocol
+that mediates the interactions between \emph{MeasurementClient} and
+\emph{MeasurementServer}s.
+Section~\ref{sec:norm} discusses the result normalization strategies.
+Section~\ref{sec:exp} describes the experiments performed and the 
+applications used in the benchmark.
+Section~\ref{sec:results} presents a preliminary schedule.
 Section~\ref{sec:conclusion} concludes the proposal.
 
 \section{Related Work} \label{sec:related}
@@ -166,7 +165,7 @@ applications has the greatest potential to benefit from cloud computing.
 Their work highlights small and medium scale projects as the main beneficiaries
 of cloud computing resources.
 
-\subsection{OpenTuner} \label{sec:opt}
+\section{OpenTuner} \label{sec:opt}
 
 OpenTuner search spaces are defined by \emph{Configurations}, that are composed
 of \emph{Parameter} of various types. Each type has restricted bounds and
@@ -181,7 +180,6 @@ techniques and meta-techniques, making the ensemble more robust.
 The source code is available\footnote{Hosted at GitHub:
 \texttt{\scriptsize github.com/jansel/opentuner}} under the MIT License.
 
-
 \begin{figure}[htpb]
     \centering
     \includegraphics[scale=.62]{opentuner-implementation}
@@ -189,7 +187,7 @@ The source code is available\footnote{Hosted at GitHub:
     \label{fig:ot-imp}
 \end{figure}
 
-Figure~\ref{fig:ot-imp} shows a high-level view OpenTuner's architecture.
+Figure~\ref{fig:ot-imp} shows a high-level view of OpenTuner's architecture.
 Measurement and searching are done in separate modules, whose main classes are
 called \emph{drivers}. The search driver requests measurements by registering
 configurations to the database. The measurement driver reads those
@@ -203,64 +201,36 @@ called \emph{meta-technique}, aims to take advantage of the strengths of each
 technique by balancing the exploitation of a technique that has produced good
 results in the past and the exploration of unused and possibly better ones.
 
-\section{Objectives} \label{sec:obj}
-
-The objectives of this research project are the following:
-
-\begin{itemize}
-    \item Implement an extension to the OpenTuner measurement driver,
-        the \emph{MeasurementClient}, that requests virtual
-        machines in the Google Compute Engine to produce
-        measurements of configurations;
-    \item Implement a \emph{MeasurementServer} that runs
-        in the virtual machines. The server receives
-        requests for results, computes them, and send
-        them to the client;
-    \item Implement a Google Compute Engine Interface,
-        to manage the communication between \emph{MeasurementClient}
-        and \emph{MeasurementServer};
-    \item Define an application protocol;
-    \item Normalize the results obtained from virtual machines
-        to the local machine;
-    \item Evaluate the performance of the implementation,
-        using the benchmark that validated OpenTuner~\cite{ansel2014opentuner}.
-\end{itemize}
-
-The remaining of this section describes the implementation objectives in
-detail, and reports the current state of the research. Section~\ref{sec:exp}
-describes the performance evaluations and the benchmark.
-
-\subsection{Measurement Server and Client}
+\section{Measurement Server and Client}
+\label{sec:ext}
 
 The interactions between the local and virtual machines will follow the
 client-server model. The local machine will run a measurement client, that will
 request results from various measurement servers running in virtual machines
 hosted at the Google Compute Engine.
 
-%\begin{figure}[htpb]
-%    \centering
-%    \begin{subfigure}{.45\textwidth}
-%        \centering
-%        \includegraphics[scale=.62]{high-level-implementation}
-%        \caption{A high-level view of the proposed architecture.
-%        Green boxes represent unmodified modules, blue boxes represent
-%        new or modified modules.}
-%        \label{fig:high-level}
-%    \end{subfigure}%
-%    \hfill
-%    \begin{subfigure}{.45\textwidth}
-%        \centering
-%        \includegraphics[scale=.62]{low-level-implementation}
-%        \caption{A lower-level view of the proposed architecture,
-%        Illustrating the communication between server and client,
-%        mediated by the Google Compute Engine API.
-%        }
-%        \label{fig:low-level}
-%    \end{subfigure}%
-%    \caption{Proposed OpenTuner Architecture,
-%    using the Google Compute Engine (GCE) API.}
-%    \label{fig:archs}
-    %\end{figure}
+\begin{figure}[htpb]
+    \centering
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \includegraphics[scale=.62]{high-level-implementation}
+        \caption{A high-level view of the proposed architecture.
+        Green boxes represent unmodified modules, blue boxes represent
+        new or modified modules.}
+        \label{fig:high-level}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \includegraphics[scale=.62]{low-level-implementation}
+        \caption{A lower-level view of the proposed architecture,
+        Illustrating the communication between server and client,
+        mediated by the Google Compute Engine API.
+        }
+        \label{fig:low-level}
+    \end{minipage}%
+    \label{fig:archs}
+\end{figure}
 
 Figure~\ref{fig:high-level} shows the proposed architecture of an OpenTuner
 application running the measurement client and communicating with the
@@ -297,7 +267,19 @@ interface.  When the search driver makes requests for results, the
 servers via the GCE interface.  The interface will call the appropriate GCE
 Python API functions, and wait for the responses.
 
-\subsection{Normalizing the Results}
+Simple experiments with the Google Compute Engine have been performed. A
+project was started and utility functions were implemented, such as
+adding and removing virtual machines, configuring firewall access
+rules, configuring virtual machines with a startup script and obtaining a
+virtual machine's IP.
+
+The utility functions and the measurement server's and client's code are
+available\footnote{All code is hosted at GitHub: \\ \texttt{\scriptsize
+github.com/phrb/measurement-server} \\ \texttt{\scriptsize
+github.com/phrb/autotuning-gce}} under the GNU General Public License.
+
+\section{Normalizing the Results}
+\label{sec:norm}
 
 The autotuner will optimize programs for a machine that will typically have an
 architectural specification different from the machines in the cloud. A
@@ -336,26 +318,6 @@ Finally, the normalization problem could be sidestepped, at least in initial
 stages of research, by running the servers and clients in the cloud using
 the same kind of virtual machine.
 
-\subsection{Using the Google Compute Engine} \label{sec:pwork}
-
-Simple experiments with the Google Compute Engine have been performed. A
-project was started and utility functions were implemented, such as
-adding and removing virtual machines, configuring firewall access
-rules, configuring virtual machines with a startup script and obtaining a
-virtual machine's IP.
-
-For testing purposes, each virtual machine is setup with a \emph{Debian 7}
-image and starts running a simple Python TCP echo server at the
-\texttt{\footnotesize 8080} port.  Listing~\ref{fig:server-test-code} shows the
-code for the server.
-
-The utility functions and the measurement server's and client's code are
-available\footnote{All code is hosted at GitHub: \\ \texttt{\scriptsize
-github.com/phrb/measurement-server} \\ \texttt{\scriptsize
-github.com/phrb/autotuning-gce}} under the GNU General Public License.
-
-\input{python_tcp}
-
 \section{Experiments} \label{sec:exp}
 
 A benchmark of applications will be composed to compare the performance of the
@@ -368,43 +330,7 @@ We expect that the experiments provide insight into the situations when using
 cloud computing resources for autotuning is beneficial, and into the
 application and efficiency of the result normalization techniques.
 
-\section{Research Schedule} \label{sec:sched}
-
-Table~\ref{tab:sched} presents a first version of the research schedule
-following the assignment's delivery dates.  The schedule spreads the tasks so
-that portions of the work predicted to be harder are assigned to longer time
-frames.  The delivery dates for harder tasks are also assigned to later in the
-project's timeline.
-
-\newcolumntype{K}{>{\centering\arraybackslash}m{3cm}}
-\newcommand{\specialcell}[2][c]{%
-  \begin{tabular}[#1]{@{}K@{}}#2\end{tabular}}
-
-\begin{table}[htpb]
-    \centering
-    \scriptsize
-    \begin{tabular}{@{}KKKK@{}}
-        \toprule
-        \specialcell{\bf AP2 \& PR \\ \bf 25/09} & \specialcell{\bf AR1 \\ \bf 16/10} & \specialcell{\bf AP3 \& AR2 \\ \bf 13/11} & \specialcell{\bf AR3 \\ \bf 25/11} \\ \midrule
-        \specialcell{ \footnotesize Paper proposal. \\[0.15cm]
-            \footnotesize 10-minute presentation. \\[0.15cm]
-            \footnotesize Preliminary experiments at GCE. \\[0.15cm]
-            \footnotesize High and low-level views of the implementation.}
-            & \specialcell{ \footnotesize First version of the paper. \\[0.15cm]
-            \footnotesize Measurement Client implementation. \\[0.15cm]
-            \footnotesize GCE Interface implementation. \\[0.15cm]
-            \footnotesize Measurement Server implementation.}
-            & \specialcell{ \footnotesize Second version of the paper. \\[0.15cm]
-            \footnotesize 20-minute presentation. \\[0.15cm]
-            \footnotesize Result normalization techniques. \\[0.15cm]
-            \footnotesize Benchmark choice. \\[0.15cm]
-            \footnotesize Application protocol full specification.}
-            & \specialcell{ \footnotesize Final version of the paper. \\[0.15cm]
-            \footnotesize Experiments, results and analysis.} \\ \bottomrule
-    \end{tabular}
-    \caption{Task scheduling for the project.}
-    \label{tab:sched}
-\end{table}
+\section{Results} \label{sec:results}
 
 \section{Conclusion} \label{sec:conclusion}
 
