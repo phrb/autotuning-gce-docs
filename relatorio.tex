@@ -184,8 +184,8 @@ of cloud computing resources.
 
 \section{OpenTuner} \label{sec:ot}
 
-OpenTuner search spaces are defined by \emph{Configurations}, that are composed
-of \emph{Parameter} of various types. Each type has restricted bounds and
+OpenTuner search spaces are defined by \emph{Configuration}s, that are composed
+of \emph{Parameter}s of various types. Each type has restricted bounds and
 manipulation functions that enable the exploration of the search space.
 OpenTuner implements ensembles of optimization techniques that
 perform well in different problem domains. The framework uses
@@ -221,16 +221,16 @@ results in the past and the exploration of unused and possibly better ones.
 \section{Measurement Server and Client}
 \label{sec:ext}
 
-Following the client-server model, the extension distributes
+The extension follows the client-server model, distributing
 measurements of program configurations between a group of virtual
 machines running \emph{MeasurementServer}s in the GCE. The servers
-wait for measurement requests from a client. They maintain copies
+waits for measurement requests from a client, and maintain copies
 of the program to be autotuned and the user-defined function that
 measures configurations.
 
 The machine running the OpenTuner autotuner runs a \emph{MeasurementClient},
-an extension of the native \emph{MeasurementDriver} that, instead of
-compiling and running requests locally, uses the GCE interface to
+an extension of the native \emph{MeasurementDriver}, that instead of
+compiling and running result requests locally, uses the GCE interface to
 route requests to virtual machines and them saves the results to the local
 database.
 
@@ -238,19 +238,38 @@ database.
     \centering
     \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=.58]{high-level-implementation}
+        \includegraphics[scale=.64]{high-level-implementation}
         \caption{A high-level view of the architecture.}
         \label{fig:high-level}
     \end{minipage}%
     \hfill
     \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=.58]{low-level-implementation}
+        \includegraphics[scale=.64]{low-level-implementation}
         \caption{A lower-level view of the architecture.}
         \label{fig:low-level}
     \end{minipage}%
     \label{fig:archs}
 \end{figure}
+
+Figures~\ref{fig:high-level} and~\ref{fig:low-level} present an
+overview of the architecture of the extension.
+Figure~\ref{fig:high-level} presents the architecture of an OpenTuner
+application running the measurement client and communicating with the
+measurement servers.  Green boxes in the figure represent OpenTuner modules
+that will not be modified, and blue boxes represent new or modified modules.
+
+Figure~\ref{fig:low-level} shows, on a lower level of abstraction, the
+interactions between the measurement client and servers. The client
+requests results from the server through a wrapper of the GCE Python API.
+The GCE interface also encapsulates the application protocol used in
+the client-server communication.
+
+The remaining of this section describes the extension implementation in further
+detail, the GCE interface and the application protocol.
+
+\subsection{Implementation Details}
+\label{sec:details}
 
 OpenTuner controls the execution flow of an application with the
 \texttt{\footnotesize main} function of the \texttt{\footnotesize
@@ -271,16 +290,6 @@ Listing~\ref{fig:measurement-client} shows the functions of the measurement
 driver that were modified to enable the \texttt{\footnotesize
 MeasurementClient} to process results with Google Compute Engine resources.
 
-Figure~\ref{fig:high-level} presents the architecture of an OpenTuner
-application running the measurement client and communicating with the
-measurement servers.  Green boxes in the figure represent OpenTuner modules
-that will not be modified, and blue boxes represent new or modified modules.
-
-Figure~\ref{fig:low-level} shows, on a lower level of abstraction, the
-interactions between the measurement client and servers.
-The client sends the program configurations to the servers, who run the
-correspondent program and respond with the measurement.
-
 During initialization the measurement client uses the GCE interface to start
 and configure virtual machines. The interface stores each measurement
 server's IP.  When the search driver makes requests for results, the
@@ -288,11 +297,16 @@ server's IP.  When the search driver makes requests for results, the
 the GCE interface.  The interface will call the appropriate GCE Python API
 functions, and wait for the responses.
 
+\todo[inline,author=Pedro]{The description of the measurement server's
+internal will be added, detailing how the user program is copied
+to the virtual machines.}
+
 \subsection{GCE Interface}
 \label{sec:gce}
 
 \todo[inline,author=Pedro]{This section will describe how the GCE interface
-mediates the result requests and configuration measurements.}
+mediates the result requests and configuration measurements, how it initializes
+the virtual machines and obtains the user code.}
 
 The interactions between the local \emph{MeasurementClient} and the virtual
 machines' \emph{MeasurementServer}s are mediated by a wrapper of the
@@ -306,13 +320,15 @@ github.com/phrb/autotuning-gce}} under the GNU General Public License.
 \subsection{Application Protocol}
 \label{sec:app}
 
-\todo[inline,author=Pedro]{The application protocol will be described here.}
+\todo[inline,author=Pedro]{The application protocol will be described here.
+The messages exchanged by the server and client and their effects will 
+be specified.}
 
 \section{Result Normalization}
 \label{sec:norm}
 
 \todo[inline,author=Pedro]{This section will discuss the different strategies
-in more depth, and relate them to the experiments performed.}
+in depth, and relate them to the experiments performed.}
 
 Using a cloud environment, an autotuner will typically optimize programs for
 a machine with a different architecture from the virtual machines. A
@@ -354,7 +370,7 @@ section.}
 
 \section{Results} \label{sec:results}
 
-\todo[inline,author=Pedro]{This section will present and discuss the results, 
+\todo[inline,author=Pedro]{This section will present and discuss the results,
 connecting the findings with normalization techniques and problem domains.}
 
 \section{Conclusion} \label{sec:conclusion}
