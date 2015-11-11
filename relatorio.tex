@@ -75,15 +75,20 @@
 
 \begin{abstract}
     The OpenTuner framework provides domain-agnostic tools for the
-    implementation of autotuners. The optimization results are
-    obtained sequentially by the measurement driver, that runs
-    in a local machine.
-    This paper presents an extension to the OpenTuner measurement driver,
-    enabling it to leverage cloud computing resources
-    from the Google Compute Engine (GCE). We compare the performance of
-    our implementation using a diverse benchmark.
+    implementation of autotuners. The framework sequentially evaluates program
+    configurations exploring search spaces that are commonly very large.
+    The sequential and empirical search takes even longer to find optimizations
+    for programs with considerable execution times.
+
+    This paper presents an extension to the OpenTuner measurement driver that
+    distributes and parallelizes the measurement process using 
+    cloud computing resources from the Google Compute Engine (GCE). 
+    We compare the performance of our implementation to the unmodified 
+    framework using a diverse benchmark. We offer insight into the problem
+    domains that benefit from this approach.
     \todo[inline,author=Pedro]{A very short summary of the results will be
-    provided in the abstract.}
+    provided in the abstract, as well as a brief discussion of the 
+    result normalization research question.}
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
@@ -91,7 +96,7 @@
 \todo[inline,author=Disclaimer]{This is a draft of the paper. The results and
 implementations are not final or completed. Future versions will improve
 the presentation and present results and conclusions. The maximum page count
-for SBRC is 14 pages, and this document is 9 pages long.}
+for SBRC is 14 pages, and this document is 10 pages long.}
 
 The program autotuning problem fits in the framework of the Algorithm Selection
 Problem, introduced by Rice in 1976~\cite{rice1976algorithm}. The objective of
@@ -99,10 +104,10 @@ an autotuner is to select the best algorithm, or algorithm configuration, for
 each instance of a problem.  Algorithms or configurations are selected
 according to performance metrics such as the time to solve the problem
 instance, the accuracy of the solution and the energy consumed.  The set of all
-possible algorithms and configurations that solve a problem define a
-\emph{search space}. Guided by the performance metrics, various optimization
-techniques search this space for the algorithm or configuration that best
-solves the problem.
+possible algorithms and configurations that solve a problem defines a
+\emph{search space}. Various optimization techniques search this space, guided
+by the performance metrics, for the algorithm or configuration that best solve
+the problem.
 
 \todo[inline,author=Pedro]{I removed the Algorithm Selection Problem figure.
 It is marginally relevant for the paper's subject, but not needed to understand
@@ -116,11 +121,23 @@ general tools for the representation and search of program configurations,
 enabling the implementation of autotuners for different problem
 domains~\cite{ansel2014opentuner,hutter2009paramils}.
 
+The OpenTuner framework~\cite{ansel2014opentuner} provides tools for the
+implementation of autotuners for various problem domains. It implements
+different search techniques that explore the same search space for program
+optimizations. Although support for parallel compilation is provided in the
+framework the empirical exploration of the search space, that is, running and
+measuring program execution time, is done sequentially. 
+
 The main contribution of this paper is the implementation of an
-extension to the OpenTuner framework~\cite{ansel2014opentuner} that
-enables it to leverage cloud computing resources.
-The interactions between the local and virtual machines (VM) follows
-the client-server model. The local machine (LM) runs a measurement client that
+OpenTuner extension that distributes and parallelizes the exploration of
+the optimization space by combining results obtained from virtual machines
+in a cloud computing environment. A local machine (LM) runs the main
+OpenTuner application and several virtual machines (VM) run measurement
+modules that provide results when requested, performing a more efficient
+exploration of the search space.
+
+The interactions between the local and virtual machines follows
+the client-server model. The local machine runs a measurement client that
 requests results from various measurement servers running in virtual machines
 hosted at the Google Compute Engine (GCE).
 We compare the performance of our extension with the
@@ -128,9 +145,6 @@ unmodified framework in a diverse benchmark of applications, identifying
 the problem domains that benefit from this cloud-based approach.
 
 \todo[inline,author=Pedro]{Added hooks for the initials GCE, LM and VM.}
-\todo[inline,author=Pedro]{I used \lq{}leverage\rq{} to implicitly say
-\lq{}potentially speedup the autotuning process\rq{}, but this expression
-will be improved in future revisions.}
 
 The rest of the paper is organized as follows.
 Section~\ref{sec:related} discusses related work.
@@ -182,6 +196,12 @@ applications has the greatest potential to benefit from cloud computing.
 Their work highlights small and medium scale projects as the main beneficiaries
 of cloud computing resources.
 
+\todo[inline,author=Pedro]{Provide a better discussion of Gupta et al.'s 
+results.}
+\todo[inline,author=Pedro]{Justify the choice of OpenTuner as the modified
+system, by saying it is a domain-agnostic tool that has, to the best of our
+knowledge, no equivalent in scope.}
+
 \section{OpenTuner} \label{sec:ot}
 
 OpenTuner search spaces are defined by \emph{Configuration}s, that are composed
@@ -217,6 +237,9 @@ Annealing~\cite{kirkpatrick1983optimization}. A resource sharing mechanism,
 called \emph{meta-technique}, aims to take advantage of the strengths of each
 technique by balancing the exploitation of a technique that has produced good
 results in the past and the exploration of unused and possibly better ones.
+
+\todo[inline,author=Pedro]{Compare sequential and parallel tuning. Describe
+when OpenTuner uses threads to compile target programs.}
 
 \section{Measurement Server and Client}
 \label{sec:ext}
@@ -321,7 +344,7 @@ github.com/phrb/autotuning-gce}} under the GNU General Public License.
 \label{sec:app}
 
 \todo[inline,author=Pedro]{The application protocol will be described here.
-The messages exchanged by the server and client and their effects will 
+The messages exchanged by the server and client and their effects will
 be specified.}
 
 \section{Result Normalization}
