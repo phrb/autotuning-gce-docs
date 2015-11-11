@@ -1,0 +1,6 @@
+[submodule "opentuner"]
+	path = opentuner
+	url = https://github.com/jansel/opentuner.git
+[submodule "gce_autotuning_experiments"]
+	path = gce_autotuning_experiments
+	url = https://github.com/phrb/gce_autotuning_experiments.git
