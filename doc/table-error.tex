@@ -1,0 +1,50 @@
+\newcolumntype{K}{>{\centering\arraybackslash}m{2.8cm}}
+\newcolumntype{T}{>{\centering\arraybackslash}m{.3cm}}
+\newcolumntype{L}{>{\centering\arraybackslash}m{4cm}}
+
+\begin{table}[htpb]
+    \centering
+    \tiny
+    \begin{tabular}{@{}KTL@{}}
+        \toprule
+        {\bf Response} & {\bf Code} & {\bf Meaning} \\ \midrule
+        {\tiny \bf NO\_ERROR} & 
+        {\tiny \tt 0} & 
+        {\tiny ``START''} \\ \midrule
+        {\tiny \bf AVAILABLE} & 
+        {\tiny \tt 1} & 
+        {\tiny \tt ``STOP''} \\ \midrule
+        {\tiny \bf STOPPED} & 
+        {\tiny \tt 2} & 
+        {\tiny \tt ``STATUS''} \\ \midrule
+        {\tiny \bf UNAVAILABLE\_ERROR} & 
+        {\tiny \tt 3} & 
+        {\tiny \tt ``STOP''} \\ \midrule
+        {\tiny \bf UNKNOWN\_COMMAND\_ERROR} & 
+        {\tiny \tt 4} & 
+        {\tiny \tt ``STATUS''} \\ \midrule
+        {\tiny \bf ARGUMENT\_ERROR} & 
+        {\tiny \tt 5} & 
+        {\tiny \tt ``DISCONNECT''} \\ \midrule
+        {\tiny \bf GITCLONE\_ERROR} & 
+        {\tiny \tt 6} & 
+        {\tiny \tt ``SHUTDOWN''} \\ \midrule
+        {\tiny \bf NO\_FILE\_ERROR} & 
+        {\tiny \tt 7} & 
+        {\tiny \tt ``CLONE REPO\_URL DIST\_DIR''} \\ \midrule
+        {\tiny \bf NO\_RUN\_METHOD\_ERROR} & 
+        {\tiny \tt 8} & 
+        {\tiny \tt ``LOAD TUNER\_PATH INTERFACE\_NAME''} \\ \midrule
+        {\tiny \bf STARTED\_ERROR} & 
+        {\tiny \tt 9} & 
+        {\tiny \tt ``MEASURE CONFIG INPUT LIMIT''} \\ \midrule
+        {\tiny \bf NOT\_READY\_ERROR} & 
+        {\tiny \tt 10} & 
+        {\tiny \tt ``GET RESULT\_ID''} \\ \midrule
+        {\tiny \bf NO\_SUCH\_RESULT\_ERROR} & 
+        {\tiny \tt 11} & 
+        {\tiny \tt ``GET RESULT\_ID''} \\ \bottomrule
+    \end{tabular}
+    \caption{Numeric responses.}
+    \label{tab:protocol-errors}
+\end{table}

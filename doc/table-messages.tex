@@ -1,0 +1,44 @@
+\newcolumntype{K}{>{\centering\arraybackslash}m{4.5cm}}
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}K@{}}#2\end{tabular}}
+
+\newcolumntype{T}{>{\centering\arraybackslash}m{1.95cm}}
+\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}}
+
+\begin{table}[htpb]
+    \centering
+    \tiny
+    \begin{tabular}{@{}TLK@{}}
+        \toprule
+        {\bf Command} & {\bf Function} & {\bf Message} \\ \midrule
+        {\tiny \bf START} &
+        {\tiny Sets the server's status to AVAILABLE} &
+        {\tiny \tt \lq{}START\rq{}} \\ \midrule
+        {\tiny \bf STOP} &
+        {\tiny Sets the server's status to STOPPED} &
+        {\tiny \tt \lq{}STOP\rq{}} \\ \midrule
+        {\tiny \bf STATUS} &
+        {\tiny Requests the server current status} &
+        {\tiny \tt \lq{}STATUS\rq{}} \\ \midrule
+        {\tiny \bf DISCONNECT} &
+        {\tiny Disconnects from the server} &
+        {\tiny \tt \lq{}DISCONNECT\rq{}} \\ \midrule
+        {\tiny \bf SHUTDOWN} &
+        {\tiny Disconnects and shuts the server down} &
+        {\tiny \tt \lq{}SHUTDOWN\rq{}} \\ \midrule
+        {\tiny \bf CLONE} &
+        {\tiny Clones a git repository to the virtual machine} &
+        {\tiny \tt \lq{}CLONE REPO\_URL DIST\_DIR\rq{}} \\ \midrule
+        {\tiny \bf LOAD} &
+        {\tiny Imports the user's MeasurementInterface into the server} &
+        {\tiny \tt \lq{}LOAD TUNER\_PATH INTERFACE\_NAME\rq{}} \\ \midrule
+        {\tiny \bf MEASURE} &
+        {\tiny Computes the measurement for a given configuration} &
+        {\tiny \tt \lq{}MEASURE CONFIG INPUT LIMIT\rq{}} \\ \midrule
+        {\tiny \bf GET} &
+        {\tiny Requests a configuration's result} &
+        {\tiny \tt \lq{}GET RESULT\_ID\rq{}} \\ \bottomrule
+    \end{tabular}
+    \caption{Server messages.}
+    \label{tab:protocol-messages}
+\end{table}
