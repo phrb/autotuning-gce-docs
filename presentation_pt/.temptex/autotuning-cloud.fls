@@ -1,4 +1,4 @@
-PWD /home/phrb/Dropbox/my_papers/autotuning-gce-docs/opentuner_cloud
+PWD /home/phrb/Dropbox/my_papers/autotuning-gce-docs/presentation_pt
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
@@ -531,6 +531,16 @@ INPUT .temptex/autotuning-cloud.vrb
 INPUT .temptex/autotuning-cloud.vrb
 INPUT ./img/hamiltonianpath.eps
 INPUT ./img/hamiltonianpath.eps
+OUTPUT .temptex/autotuning-cloud.vrb
+INPUT .temptex/autotuning-cloud.vrb
+INPUT .temptex/autotuning-cloud.vrb
+INPUT ./img/i2_p_n_comparison.eps
+INPUT ./img/i2_p_n_comparison.eps
+OUTPUT .temptex/autotuning-cloud.vrb
+INPUT .temptex/autotuning-cloud.vrb
+INPUT .temptex/autotuning-cloud.vrb
+INPUT ./img/i4_p_n_comparison.eps
+INPUT ./img/i4_p_n_comparison.eps
 OUTPUT .temptex/autotuning-cloud.vrb
 INPUT .temptex/autotuning-cloud.vrb
 INPUT .temptex/autotuning-cloud.vrb

@@ -3,3 +3,4 @@
 \beamer@sectionintoc {1}{Motivações}{2}{0}{1}
 \beamer@sectionintoc {2}{Objetivos}{5}{0}{2}
 \beamer@sectionintoc {3}{Implementação}{7}{0}{3}
+\beamer@sectionintoc {4}{Resultados Parciais}{18}{0}{4}
