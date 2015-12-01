@@ -393,6 +393,10 @@ github.com/phrb/measurement\_client}} under the GNU General Public License.
 \section{Result Normalization}
 \label{sec:norm}
 
+\todo[inline,author=Pedro]{This discussion will probably be left out
+of this version of the paper, since we did not run experiments with
+architecture-dependant problems.}
+
 Using a cloud environment, an autotuner will typically optimize programs for
 a machine with a different architecture from the virtual machines. A
 normalization technique must be devised that enables the results found in the
@@ -429,26 +433,54 @@ the same kind of virtual machine.
 \section{Experiments} \label{sec:exp}
 
 \todo[inline,author=Pedro]{The experimental settings will be described in this
-section.}
+section. (Google Compute Engine specifics, VM specs...)}
+
+\subsection{Travelling Salesperson Problem}
+
+\todo[inline,author=Pedro]{Provide a brief description of TSP.}
 
 \section{Results} \label{sec:results}
 
 \todo[inline,author=Pedro]{This section will present and discuss the results,
 connecting the findings with normalization techniques and problem domains.}
 
+\subsection{Travelling Salesperson Problem}
+
 \begin{figure}[htpb]
     \centering
     \begin{minipage}{.5\textwidth}
         \centering
-        \includegraphics[scale=.34]{i2_p_n_comparison}
-        \caption{Measurements using two virtual machine instances.}
+        \includegraphics[scale=.36]{i2_p_n_comparison}
+        \caption{Measurements using two virtual machine instances, solving
+                 a TSP instance of size 532.}
         \label{fig:high-level}
     \end{minipage}%
     \hfill
     \begin{minipage}{.5\textwidth}
         \centering
-        \includegraphics[scale=.34]{i4_p_n_comparison}
-        \caption{Measurements using four virtual machine instances.}
+        \includegraphics[scale=.36]{i4_p_n_comparison}
+        \caption{Measurements using four virtual machine instances,
+                 solving a TSP instance of size 532.}
+        \label{fig:low-level}
+    \end{minipage}%
+    \label{fig:archs}
+\end{figure}
+
+\begin{figure}[htpb]
+    \centering
+    \begin{minipage}{.5\textwidth}
+        \centering
+        \includegraphics[scale=.36]{i2_p_n_comparison_85900}
+        \caption{Measurements using two virtual machine instances,
+                 solving an instance of size 85900.}
+        \label{fig:high-level}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{.5\textwidth}
+        \centering
+        \includegraphics[scale=.36]{i4_p_n_comparison_85900}
+        \caption{Measurements using four virtual machine instances,
+                 solving an instance of size 85900.}
         \label{fig:low-level}
     \end{minipage}%
     \label{fig:archs}
