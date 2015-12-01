@@ -96,7 +96,7 @@
 \todo[inline,author=Disclaimer]{This is a draft of the paper. The results and
 implementations are not final or completed. Future versions will improve
 the presentation and present results and conclusions. The maximum page count
-for SBRC is 14 pages, and this document is 10 pages long.}
+for SBRC is 14 pages, and this document is 12 pages long.}
 
 The program autotuning problem fits in the framework of the Algorithm Selection
 Problem, introduced by Rice in 1976~\cite{rice1976algorithm}. The objective of
@@ -342,11 +342,11 @@ modifications are needed to the server or client.
 \subsection{Application Protocol}
 \label{sec:app}
 
-This section describes the text-based application protocol used in the 
-client-server communications mediated by the \emph{GCEInterface}. Note the 
-\texttt{\footnotesize CLONE} message. The user's OpenTuner application must 
+This section describes the text-based application protocol used in the
+client-server communications mediated by the \emph{GCEInterface}. Note the
+\texttt{\footnotesize CLONE} message. The user's OpenTuner application must
 be a git project available via \texttt{\footnotesize{HTTP}}. The application
-will be cloned to the virtual machine by the server and used to obtain the 
+will be cloned to the virtual machine by the server and used to obtain the
 autotuning results requested by the client.
 
 \paragraph{Messages}
@@ -356,18 +356,18 @@ Table~\ref{tab:protocol-messages} shows all the messages in the protocol,
 a brief description of their meaning and their string format. The client
 must send a \texttt{\footnotesize MEASURE} message for each configuration
 that is measured. The server returns a unique ID that is used to retrieve
-the results when they are ready. This is done by sending a 
+the results when they are ready. This is done by sending a
 \texttt{\footnotesize GET} message.
 
 \paragraph{Server Responses}
 
-The server responds to each request with a message template and 
+The server responds to each request with a message template and
 trailing, message-specific parameters. Responses always start
 with the correspondent command name and end with a newline character.
 Each response contains the current server status (\texttt{\footnotesize SERVER\_STATUS})
 and error code of the command (\texttt{\footnotesize ERROR\_STATUS}).
 The optional argument list (\texttt{\footnotesize [ARGS..]}) contains the
-measurement result, for example, in the case of a successful 
+measurement result, for example, in the case of a successful
 \texttt{\footnotesize GET} response. Figure~\ref{fig:response-template}
 shows the format of a server response.
 
@@ -387,7 +387,7 @@ shows the format of a server response.
 The code for the measurement server, client and the interface is
 available\footnote{All code is hosted at GitHub: \\ \texttt{\scriptsize
 github.com/phrb/measurement-server} \\ \texttt{\scriptsize
-github.com/phrb/gce\_interface} \\ \texttt{\scriptsize 
+github.com/phrb/gce\_interface} \\ \texttt{\scriptsize
 github.com/phrb/measurement\_client}} under the GNU General Public License.
 
 \section{Result Normalization}
@@ -432,12 +432,30 @@ the same kind of virtual machine.
 
 \section{Experiments} \label{sec:exp}
 
-\todo[inline,author=Pedro]{The experimental settings will be described in this
-section. (Google Compute Engine specifics, VM specs...)}
+This section describes the problems that compose the benchmark and the Google
+Compute Engine's virtual machines and project settings.  The performances of
+the autotuners for each problem in the benchmark were measured in 12 different
+experimental settings. Each tuning run lasted 15 minutes, used 2, 4 or 8
+virtual machines, and was repeated 4 times.  We also varied the number of
+result requests that each virtual machine in a tuning run processed, namely 1,
+4, 8 or 16 requests per machine.
+
+\subsection{Using the Google Compute Engine}
+
+All virtual machines used in the experiments had a single vCPU and 3.75Gb of
+RAM (Google Compute Engine machine type \texttt{\footnotesize n1-standard-1}).
+All experiments were performed with machines from the \texttt{\footnotesize
+us-central1-f} zone. We built a virtual machine image with the latest stable
+Debian distribution and all dependencies installed, speeding up the virtual
+machines' initialization time.
 
 \subsection{Travelling Salesperson Problem}
 
-\todo[inline,author=Pedro]{Provide a brief description of TSP.}
+The instances of the Travelling Salesperson Problem (TSP) used in the
+experiments in this paper were obtained from TSPLIB~\cite{reinelt1991tsplib}.
+A TSP solver was implemented as an OpenTuner application. The search space was
+defined by all the possible permutations, or tours, of cities where the first
+and last cities are the same. We used two instances, of size 532 and 85900.
 
 \section{Results} \label{sec:results}
 
@@ -445,6 +463,10 @@ section. (Google Compute Engine specifics, VM specs...)}
 connecting the findings with normalization techniques and problem domains.}
 
 \subsection{Travelling Salesperson Problem}
+
+\todo[inline,author=Pedro]{Here we will discuss the results for the TSP. We
+will argue that we achieved results very close to a high-end machine
+using cheap and low-end virtual machines.}
 
 \begin{figure}[htpb]
     \centering
