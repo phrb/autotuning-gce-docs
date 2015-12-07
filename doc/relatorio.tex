@@ -50,15 +50,19 @@
 \begin{abstract}
     The OpenTuner framework provides domain-agnostic tools for the
     implementation of autotuners. The framework sequentially evaluates program
-    configurations exploring search spaces that are commonly very large.
-    The sequential and empirical search takes even longer to find optimizations
+    configurations exploring search spaces that are commonly very large. 
+    Although the autotuner is able to find incrementally better solutions 
+    quickly, finding good configurations typically takes a very long time. 
+    This sequential search takes even longer to find optimizations
     for programs with considerable execution times.
 
-    This paper presents an extension to the OpenTuner measurement driver that
+    This paper proposes a methodology and a communication protocol for the 
+    distributed execution of autotuners implemented in the OpenTuner framework.
+    It presents an extension to the OpenTuner measurement driver that
     distributes and parallelizes the measurement process using
     cloud computing resources from the Google Compute Engine (GCE).
     We compare the performance of our implementation to the unmodified
-    framework using a diverse benchmark. We offer insight into the problem
+    framework using an application benchmark. We offer insight into the problem
     domains that benefit from this approach.
     \todo[inline,author=Pedro]{A very short summary of the results will be
     provided in the abstract, as well as a brief discussion of the
