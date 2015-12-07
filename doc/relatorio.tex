@@ -1,44 +1,18 @@
-\documentclass[a4paper, 12pt]{article}
+\documentclass[12pt]{article}
 
 \usepackage{sbc-template}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{fontspec}
-\usepackage{array}
-\usepackage{fixltx2e}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{float}
-\usepackage{a4wide}
-\usepackage{array}
-\usepackage{multicol}
 \usepackage[table]{xcolor}
-\usepackage{makeidx}
-\usepackage{hyperref}
 \usepackage{booktabs}
-\usepackage{setspace}
 \usepackage[colorinlistoftodos,prependcaption,textsize=footnotesize]{todonotes}
-\usepackage{minted}
-\usepackage[bottom]{footmisc}
-\usepackage[nottoc]{tocbibind}
-\usepackage{listings}
-\usepackage[a4paper]{geometry}
-\usepackage[square, sort, comma, numbers]{natbib}
 
-\onehalfspacing
 \graphicspath{{./img/}}
 
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
 
-\setsansfont{DejaVu Sans}
-\setmonofont{DejaVu Sans Mono}
-
 \begin{document}
-
-\hypersetup{backref,pdfpagemode=FullScreen,colorlinks=true}
 
 \thispagestyle{empty}
 \begin{center}
@@ -470,17 +444,17 @@ using cheap and low-end virtual machines.}
 
 \begin{figure}[htpb]
     \centering
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=.36]{i2_p_n_comparison}
+        \includegraphics[scale=.35]{i2_p_n_comparison}
         \caption{Measurements using two virtual machine instances, solving
                  a TSP instance of size 532.}
         \label{fig:high-level}
     \end{minipage}%
     \hfill
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=.36]{i4_p_n_comparison}
+        \includegraphics[scale=.35]{i4_p_n_comparison}
         \caption{Measurements using four virtual machine instances,
                  solving a TSP instance of size 532.}
         \label{fig:low-level}
@@ -490,17 +464,17 @@ using cheap and low-end virtual machines.}
 
 \begin{figure}[htpb]
     \centering
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=.36]{i2_p_n_comparison_85900}
+        \includegraphics[scale=.35]{i2_p_n_comparison_85900}
         \caption{Measurements using two virtual machine instances,
                  solving an instance of size 85900.}
         \label{fig:high-level}
     \end{minipage}%
     \hfill
-    \begin{minipage}{.5\textwidth}
+    \begin{minipage}{.45\textwidth}
         \centering
-        \includegraphics[scale=.36]{i4_p_n_comparison_85900}
+        \includegraphics[scale=.35]{i4_p_n_comparison_85900}
         \caption{Measurements using four virtual machine instances,
                  solving an instance of size 85900.}
         \label{fig:low-level}
