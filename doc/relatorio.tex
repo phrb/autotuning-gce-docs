@@ -12,58 +12,28 @@
 \setcounter{secnumdepth}{2}
 \setcounter{tocdepth}{2}
 
+\title{A New Program Autotuning Methodology Using Cloud Computing and OpenTuner}
+\author{Pedro Bruel, Alfredo Goldman, Daniel Batista}
+\address{Instituto de Matemática e Estatística (IME)\\
+Universidade de São Paulo (USP)\\
+R. do Matão, 1010 – Cidade Universitária, São Paulo – SP, 05508-090\\
+\email{\{phrb,gold,batista\}@ime.usp.br}
+}
+
 \begin{document}
 
-\thispagestyle{empty}
-\begin{center}
-    \textbf{\Large{Program Autotuning with \\ Cloud Computing and OpenTuner}}\\
-
-    \vspace*{0.5cm}
-
-    \begin{minipage}{.3\linewidth}
-        \begin{flushleft}
-            Pedro Bruel\\
-            phrb@ime.usp.br
-        \end{flushleft}
-    \end{minipage}
-    \begin{minipage}{.3\linewidth}
-        \begin{center}
-            Alfredo Goldman\\
-            gold@ime.usp.br
-        \end{center}
-    \end{minipage}
-    \begin{minipage}{.3\linewidth}
-        \begin{flushright}
-            Daniel Batista\\
-            batista@ime.usp.br
-        \end{flushright}
-    \end{minipage}
-
-    \vskip 0.5cm
-
-    \normalsize{Instituto de Matemática e Estatística (IME)\\
-                Universidade de São Paulo (USP)\\
-                R. do Matão, 1010 – Vila Universitária, São Paulo – SP, 05508-090\\}
-
-\end{center}
+\maketitle
 
 \begin{abstract}
-    The OpenTuner framework provides domain-agnostic tools for the
-    implementation of autotuners. The framework sequentially evaluates program
-    configurations exploring search spaces that are commonly very large. 
-    Although the autotuner is able to find incrementally better solutions 
-    quickly, finding good configurations typically takes a very long time. 
-    This sequential search takes even longer to find optimizations
-    for programs with considerable execution times.
 
-    This paper proposes a methodology and a communication protocol for the 
-    distributed execution of autotuners implemented in the OpenTuner framework.
-    It presents an extension to the OpenTuner measurement driver that
-    distributes and parallelizes the measurement process using
-    cloud computing resources from the Google Compute Engine (GCE).
-    We compare the performance of our implementation to the unmodified
-    framework using an application benchmark. We offer insight into the problem
-    domains that benefit from this approach.
+%This sequential search takes even longer to find
+%optimizations for programs with considerable execution times. 
+
+%Although an autotuner is able to find incrementally better solutions
+%quickly, finding good configurations typically takes a very long time.
+
+The OpenTuner framework provides domain-agnostic tools for the implementation of autotuners. It sequentially evaluates program configurations exploring search spaces that are commonly very large. This paper proposes a new methodology and a protocol for the distributed execution of autotuners. Both contributions are implemented in the OpenTuner framework as an extension to the OpenTuner measurement driver by distributing and parallelizing the measurement process via cloud computing resources. The performance evaluation shows that autotuners implemented with the extension are able to achieve good performance using few and cheap cloud computing resources, lowering the cost and the power consumption of producing an autotuned solution.
+
     \todo[inline,author=Pedro]{A very short summary of the results will be
     provided in the abstract, as well as a brief discussion of the
     result normalization research question.}
