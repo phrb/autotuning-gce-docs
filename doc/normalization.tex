@@ -1,0 +1,39 @@
+\section{Result Normalization}
+\label{sec:norm}
+
+\todo[inline,author=Pedro]{This discussion will probably be left out
+of this version of the paper, since we did not run experiments with
+architecture-dependant problems.}
+
+Using a cloud environment, an autotuner will typically optimize programs for
+a machine with a different architecture from the virtual machines. A
+normalization technique must be devised that enables the results found in the
+virtual machines to be valid for the local machine.  We present four
+approaches to this problem. The best approach for each problem domain
+must be experimentally determined, and could be a combination of the approaches
+described here.
+
+\paragraph{Autotune Performance Models}
+Another autotuner could be implemented to optimize parameters of a simple
+performance model, that would associate a configuration's measurement and the
+virtual machine that produced it with a conversion function that transposes
+performance results to the target architecture.
+
+\paragraph{Ensembles of Virtual Machines}
+The cloud application could be composed of virtual machines with different
+architectures. The final performance measurement for a configuration would be
+built from some combination of the results obtained in these different virtual
+machines.
+
+\paragraph{Architecture Simulators}
+The target machine could be modeled by an architecture simulator such as
+\emph{zsim}~\cite{sanchez2013zsim}, a simulator for multi-core architectures
+available\footnote{Hosted at GitHub: \texttt{\scriptsize
+https://github.com/s5z/zsim}} under the GNU General Public License.  Using a
+simulator would solve the normalization problem but introduce other problems,
+such as the simulator's accuracy and performance.
+
+\paragraph{Autotune in the Cloud}
+Finally, the normalization problem could be sidestepped, at least in initial
+stages of research, by running the servers and clients in the cloud using
+the same kind of virtual machine.

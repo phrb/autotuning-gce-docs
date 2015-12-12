@@ -1,0 +1,26 @@
+\section{Experiments} \label{sec:exp}
+
+This section describes the problems that compose the benchmark and the Google
+Compute Engine's virtual machines and project settings.  The performances of
+the autotuners for each problem in the benchmark were measured in 12 different
+experimental settings. Each tuning run lasted 15 minutes, used 2, 4 or 8
+virtual machines, and was repeated 4 times.  We also varied the number of
+result requests that each virtual machine in a tuning run processed, namely 1,
+4, 8 or 16 requests per machine.
+
+\subsection{Using the Google Compute Engine}
+
+All virtual machines used in the experiments had a single vCPU and 3.75Gb of
+RAM (Google Compute Engine machine type \texttt{\footnotesize n1-standard-1}).
+All experiments were performed with machines from the \texttt{\footnotesize
+us-central1-f} zone. We built a virtual machine image with the latest stable
+Debian distribution and all dependencies installed, speeding up the virtual
+machines' initialization time.
+
+\subsection{Travelling Salesperson Problem}
+
+The instances of the Travelling Salesperson Problem (TSP) used in the
+experiments in this paper were obtained from TSPLIB~\cite{reinelt1991tsplib}.
+A TSP solver was implemented as an OpenTuner application. The search space was
+defined by all the possible permutations, or tours, of cities where the first
+and last cities are the same. We used two instances, of size 532 and 85900.

@@ -1,0 +1,42 @@
+\section{Related Work} \label{sec:related}
+
+Rice's conceptual framework~\cite{rice1976algorithm} formed the foundation
+of autotuners in various problem domains.  In 1997, the PHiPAC
+system~\cite{bilmes1997phipac} used code generators and search scripts to
+automatically generate high performance code
+for matrix multiplication. Since then, systems tackled different domains with a
+diversity of strategies. Whaley \emph{et al.}~\cite{whaley1998atlas} introduced
+the ATLAS project, that optimizes dense matrix multiply routines. The
+OSKI~\cite{vuduc2005oski} library provides automatically tuned kernels for
+sparse matrices. The FFTW~\cite{frigo1998fftw} library provides tuned C
+subroutines for computing the Discrete Fourier Transform.  In an effort to
+provide a common representation of multiple parallel programming models, the
+INSIEME compiler project~\cite{jordan2012multi} implements abstractions for
+OpenMP, MPI and OpenCL, and generates optimized parallel code for heterogeneous
+multi-core architectures.
+
+Some autotuning systems provide generic tools that enable the implementation of
+autotuners in various domains. PetaBricks~\cite{ansel2009petabricks} is a
+language, compiler and autotuner that introduces abstractions, such as the
+\texttt{\footnotesize either...or} construct, that enable programmers to define
+multiple algorithms for the same problem.  The ParamILS
+framework~\cite{hutter2009paramils} applies stochastic local search methods
+for algorithm configuration and parameter tuning.  The OpenTuner
+framework~\cite{ansel2014opentuner} provides ensembles of techniques that
+search spaces of program configurations. Bosboom \emph{et al.} and Eliahu use
+OpenTuner to implement a domain specific language for data-flow
+programming~\cite{bosboom2014streamjit} and a framework for recursive parallel
+algorithm optimization~\cite{eliahu2015frpa}.
+
+In a progression of papers~\cite{gupta2012exploring,gupta2014evaluating,gupta2013hpccloud},
+Gupta \emph{et al.} provide experimental evaluations of the application of
+cloud computing to high performance computing, describing which kind of
+applications has the greatest potential to benefit from cloud computing.
+Their work highlights small and medium scale projects as the main beneficiaries
+of cloud computing resources.
+
+\todo[inline,author=Pedro]{Provide a better discussion of Gupta et al.'s
+results.}
+\todo[inline,author=Pedro]{Justify the choice of OpenTuner as the modified
+system, by saying it is a domain-agnostic tool that has, to the best of our
+knowledge, no equivalent in scope.}

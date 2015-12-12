@@ -1,0 +1,38 @@
+\section{OpenTuner} \label{sec:ot}
+
+OpenTuner search spaces are defined by \emph{Configuration}s, that are composed
+of \emph{Parameter}s of various types. Each type has restricted bounds and
+manipulation functions that enable the exploration of the search space.
+OpenTuner implements ensembles of optimization techniques that
+perform well in different problem domains. The framework uses
+\emph{meta-techniques} to coordinate the distribution of resources
+between techniques.
+Results found during search are shared through a
+database. An OpenTuner application can implement its own search
+techniques and meta-techniques, making the ensemble more robust.
+The source code is available\footnote{Hosted at GitHub:
+\texttt{\scriptsize github.com/jansel/opentuner}} under the MIT License.
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[scale=.62]{opentuner-implementation}
+    \caption{Simplified OpenTuner Architecture.}
+    \label{fig:ot-imp}
+\end{figure}
+
+Figure~\ref{fig:ot-imp} shows a high-level view of OpenTuner's architecture.
+Measurement and searching are done in separate modules, whose main classes are
+called \emph{drivers}. The search driver requests measurements by registering
+configurations to the database. The measurement driver reads those
+configurations and writes back the desired results.  Currently, the
+measurements are performed sequentially.
+
+OpenTuner implements optimization techniques such as the
+Nelder-Mead~\cite{nelder1965simplex} simplex method and Simulated
+Annealing~\cite{kirkpatrick1983optimization}. A resource sharing mechanism,
+called \emph{meta-technique}, aims to take advantage of the strengths of each
+technique by balancing the exploitation of a technique that has produced good
+results in the past and the exploration of unused and possibly better ones.
+
+\todo[inline,author=Pedro]{Compare sequential and parallel tuning. Describe
+when OpenTuner uses threads to compile target programs.}
