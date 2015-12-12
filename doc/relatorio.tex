@@ -26,25 +26,23 @@ R. do Matão, 1010 – Cidade Universitária, São Paulo – SP, 05508-090\\
 
 \begin{abstract}
 
-%This sequential search takes even longer to find
-%optimizations for programs with considerable execution times. 
+The OpenTuner framework provides domain-agnostic tools for the implementation
+of autotuners. It sequentially evaluates program configurations exploring
+search spaces that are commonly very large. This paper proposes a new
+methodology and a protocol for the distributed execution of autotuners. Both
+contributions are implemented in the OpenTuner framework as an extension to the
+OpenTuner measurement driver by distributing and parallelizing the measurement
+process via cloud computing resources. The performance evaluation shows that
+autotuners implemented with the extension are able to achieve good performance
+using few and cheap cloud computing resources, lowering the cost and the power
+consumption of producing an autotuned solution.
 
-%Although an autotuner is able to find incrementally better solutions
-%quickly, finding good configurations typically takes a very long time.
-
-The OpenTuner framework provides domain-agnostic tools for the implementation of autotuners. It sequentially evaluates program configurations exploring search spaces that are commonly very large. This paper proposes a new methodology and a protocol for the distributed execution of autotuners. Both contributions are implemented in the OpenTuner framework as an extension to the OpenTuner measurement driver by distributing and parallelizing the measurement process via cloud computing resources. The performance evaluation shows that autotuners implemented with the extension are able to achieve good performance using few and cheap cloud computing resources, lowering the cost and the power consumption of producing an autotuned solution.
-
-    \todo[inline,author=Pedro]{A very short summary of the results will be
-    provided in the abstract, as well as a brief discussion of the
-    result normalization research question.}
+\todo[inline,author=Pedro]{A very short summary of the results will be
+provided in the abstract, as well as a brief discussion of the
+result normalization research question.}
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
-
-\todo[inline,author=Disclaimer]{This is a draft of the paper. The results and
-implementations are not final or completed. Future versions will improve
-the presentation and present results and conclusions. The maximum page count
-for SBRC is 14 pages, and this document is 12 pages long.}
 
 The program autotuning problem fits in the framework of the Algorithm Selection
 Problem, introduced by Rice in 1976~\cite{rice1976algorithm}. The objective of
@@ -72,29 +70,28 @@ optimizations. Although support for parallel compilation is provided in the
 framework the empirical exploration of the search space, that is, running and
 measuring program execution time, is done sequentially.
 
-The main contribution of this paper is the implementation of an
-OpenTuner extension that distributes and parallelizes the exploration of
-the optimization space by combining results obtained from virtual machines
-in a cloud computing environment. A local machine (LM) runs the main
-OpenTuner application and several virtual machines (VM) run measurement
-modules that provide results when requested, performing a more efficient
-exploration of the search space.
+The contributions of this paper are a new methodology and a protocol for the
+distributed execution of autotuners using cloud computing resources.  The
+methodology and protocol are implemented as extensions to the OpenTuner
+framework distributing and parallelizing the exploration of optimization spaces
+by combining results obtained from virtual machines running in a network.  A
+local machine (LM) runs the main OpenTuner application and several virtual
+machines (VM) run measurement modules that provide results when requested,
+performing a more efficient exploration of the search space.
 
-The interactions between the local and virtual machines follows
-the client-server model. The local machine runs a measurement client that
-requests results from various measurement servers running in virtual machines
-hosted at the Google Compute Engine (GCE).
-We compare the performance of our extension with the
-unmodified framework in a diverse benchmark of applications, identifying
-the problem domains that benefit from this cloud-based approach.
+The interactions between the local and virtual machines follows the
+client-server model. The local machine runs a measurement client that requests
+results from various measurement servers running in virtual machines hosted at
+the Google Compute Engine (GCE).  We compare the performance of our extension
+with the unmodified framework in a benchmark of applications,
+identifying the problem domains that benefit from this cloud-based approach.
 
 The rest of the paper is organized as follows.
 Section~\ref{sec:related} discusses related work.
 Section~\ref{sec:ot} discusses the architecture of the OpenTuner framework.
-Section~\ref{sec:ext} presents the architecture of the measurement driver
-extension, the GCE interface and the application protocol
-that mediates the interactions between the \emph{MeasurementClient} and
-\emph{MeasurementServer}s.
+Section~\ref{sec:ext} presents the proposed methodology, the architecture of 
+the measurement driver extension, the GCE interface and the application 
+protocol.
 Section~\ref{sec:norm} discusses the result normalization strategies.
 Section~\ref{sec:exp} describes the experiments performed and the
 applications used in the benchmark.
