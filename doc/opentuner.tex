@@ -24,8 +24,15 @@ Figure~\ref{fig:ot-imp} shows a high-level view of OpenTuner's architecture.
 Measurement and searching are done in separate modules, whose main classes are
 called \emph{drivers}. The search driver requests measurements by registering
 configurations to the database. The measurement driver reads those
-configurations and writes back the desired results.  Currently, the
-measurements are performed sequentially.
+configurations and writes back the desired results. Using the measurement
+driver available in the framework, the measurements are performed sequentially.
+
+Before running the user-defined measurement function the OpenTuner measurement
+driver calls compilation hooks that can be run in parallel using Python
+threads. When the autotuned program needs to be compiled only once, as in the
+Travelling Salesperson example shown in Section~\ref{sec:exp}, the autotuner
+could respond to more simultaneous result requests if the measurement driver
+was able to also parallelize the runs of the user-defined measurement function.
 
 OpenTuner implements optimization techniques such as the
 Nelder-Mead~\cite{nelder1965simplex} simplex method and Simulated
@@ -33,6 +40,3 @@ Annealing~\cite{kirkpatrick1983optimization}. A resource sharing mechanism,
 called \emph{meta-technique}, aims to take advantage of the strengths of each
 technique by balancing the exploitation of a technique that has produced good
 results in the past and the exploration of unused and possibly better ones.
-
-\todo[inline,author=Pedro]{Compare sequential and parallel tuning. Describe
-when OpenTuner uses threads to compile target programs.}
