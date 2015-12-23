@@ -16,7 +16,7 @@ using cheap and low-end virtual machines.}
         \includegraphics[scale=.35]{i2_p_n_comparison}
         \caption{Measurements using two virtual machine instances, solving
                  a TSP instance of size 532.}
-        \label{fig:high-level}
+        \label{fig:532tspi2}
     \end{minipage}%
     \hfill
     \begin{minipage}{.45\textwidth}
@@ -24,9 +24,9 @@ using cheap and low-end virtual machines.}
         \includegraphics[scale=.35]{i4_p_n_comparison}
         \caption{Measurements using four virtual machine instances,
                  solving a TSP instance of size 532.}
-        \label{fig:low-level}
+        \label{fig:532tspi4}
     \end{minipage}%
-    \label{fig:archs}
+    \label{fig:532tsp}
 \end{figure}
 
 \begin{figure}[htpb]
@@ -36,7 +36,7 @@ using cheap and low-end virtual machines.}
         \includegraphics[scale=.35]{i2_p_n_comparison_85900}
         \caption{Measurements using two virtual machine instances,
                  solving an instance of size 85900.}
-        \label{fig:high-level}
+        \label{fig:85900tspi2}
     \end{minipage}%
     \hfill
     \begin{minipage}{.45\textwidth}
@@ -44,7 +44,27 @@ using cheap and low-end virtual machines.}
         \includegraphics[scale=.35]{i4_p_n_comparison_85900}
         \caption{Measurements using four virtual machine instances,
                  solving an instance of size 85900.}
-        \label{fig:low-level}
+        \label{fig:85900tspi4}
     \end{minipage}%
-    \label{fig:archs}
+    \label{fig:85900tsp}
+\end{figure}
+
+\begin{figure}[htpb]
+    \centering
+    \begin{minipage}{.48\textwidth}
+        \centering
+        \includegraphics[scale=.48]{pla85900_15min_boxplot}
+        \caption{Boxplots of 4 runs solving an instance of size 85900 with
+                 different numbers of VMs and requests per VM.}
+        \label{fig:85900boxplot}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{.48\textwidth}
+        \centering
+        \includegraphics[scale=.48]{att532_15min_boxplot}
+        \caption{Boxplots of 4 runs solving an instance of size 532 with
+                 different numbers of VMs and requests per VM.}
+        \label{fig:532boxplot}
+    \end{minipage}%
+    \label{fig:boxplots}
 \end{figure}

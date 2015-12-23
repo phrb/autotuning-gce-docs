@@ -11,7 +11,7 @@ possible algorithms and configurations that solve a problem defines a
 by the performance metrics, for the algorithm or configuration that best solve
 the problem.
 
-The are specialized autotuners for domains such as matrix
+There are specialized autotuners for domains such as matrix
 multiplication~\cite{bilmes1997phipac}, dense~\cite{whaley1998atlas} or
 sparse~\cite{vuduc2005oski} matrix linear algebra, and parallel
 programming~\cite{jordan2012multi}. Other autotuning frameworks provide more
@@ -22,29 +22,32 @@ domains~\cite{ansel2014opentuner,hutter2009paramils}.
 The OpenTuner framework~\cite{ansel2014opentuner} provides tools for the
 implementation of autotuners for various problem domains. It implements
 different search techniques that explore the same search space for program
-optimizations. Although support for parallel compilation is provided in the
-framework the empirical exploration of the search space, that is, running and
-measuring program execution time, is done sequentially.
+optimizations. 
+Running and measuring program execution time --- that is, the empirical 
+exploration of the search space --- is done sequentially.
+The framework provides support for parallel compilation.
 
 The contributions of this paper are a new methodology and a protocol for the
 distributed execution of autotuners using cloud computing resources.  The
 methodology and protocol are implemented as extensions to the OpenTuner
 framework distributing and parallelizing the exploration of optimization spaces
-by combining results obtained from virtual machines running in a network.  A
-local machine (LM) runs the main OpenTuner application and several virtual
-machines (VM) run measurement modules that provide results when requested,
-performing a more efficient exploration of the search space.
+by combining results obtained from virtual machines.  A local machine (LM) runs
+the main OpenTuner application. Several virtual machines (VM) run measurement
+modules and provide results when requested. This distributed approach performs
+a more cost efficient exploration of the search space in comparison with the
+sequential execution.
 
 The interactions between the local and virtual machines follows the
 client-server model. The local machine runs a measurement client that requests
 results from various measurement servers running in virtual machines hosted at
-the Google Compute Engine (GCE).  We compare the performance of our extension
-with the unmodified framework in a benchmark of applications,
-identifying the problem domains that benefit from this cloud-based approach.
+a public cloud. The experiments in this paper used the Google Compute Engine
+(GCE).  We compare the performance of our extension with the unmodified
+framework in a benchmark of applications, identifying the problem domains that
+benefit from this cloud-based approach.
 
 The rest of the paper is organized as follows.
 Section~\ref{sec:related} discusses related work.
-Section~\ref{sec:ot} discusses the architecture of the OpenTuner framework.
+Section~\ref{sec:ot} describes the architecture of the OpenTuner framework.
 Section~\ref{sec:ext} presents the proposed methodology, the architecture of 
 the measurement driver extension, the GCE interface and the application 
 protocol.

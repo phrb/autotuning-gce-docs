@@ -9,11 +9,12 @@ hosted at a public cloud, it is typical that the target architecture will
 differ from the virtual machines'. Depending on the configuration of the
 cloud application the instances could also have different architectures.
 
-To effectively leverage cloud computing resources a normalization technique
-must be devised that enables the results found in the virtual machines to be
-valid for the target machine.  We present four approaches to this problem. The
-best approach for each problem domain must be experimentally determined, and
-could be a combination of the approaches described here.
+To effectively leverage cloud computing resources for autotuning, a
+normalization technique must be devised that enables the results found in the
+virtual machines to be valid for the target machine.  We present four
+approaches to this problem. The best approach for each problem domain must be
+experimentally determined, and could be a combination of the approaches
+described here.
 
 \paragraph{Autotune Performance Models}
 Another autotuner could be implemented to optimize parameters of a simple
@@ -27,13 +28,11 @@ architectures. The final performance measurement for a configuration would be
 built from some combination of the results obtained in these different virtual
 machines.
 
-\paragraph{Architecture Simulators}
+\paragraph{Architecture Simulators} 
 The target machine could be modeled by an architecture simulator such as
-\emph{zsim}~\cite{sanchez2013zsim}, a simulator for multi-core architectures
-available\footnote{Hosted at GitHub: \texttt{\scriptsize
-https://github.com/s5z/zsim}} under the GNU General Public License.  Using a
-simulator would solve the normalization problem but introduce other problems,
-such as the simulator's accuracy and performance.
+\emph{zsim}~\cite{sanchez2013zsim}, a simulator for multi-core architectures.
+Using a simulator would solve the normalization problem but introduce other
+problems, such as the simulator's accuracy and performance.
 
 \paragraph{Autotune in the Cloud}
 Finally, the normalization problem could be sidestepped, at least in initial

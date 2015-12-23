@@ -10,8 +10,8 @@ between techniques.
 Results found during search are shared through a
 database. An OpenTuner application can implement its own search
 techniques and meta-techniques, making the ensemble more robust.
-The source code is available\footnote{Hosted at GitHub:
-\texttt{\scriptsize github.com/jansel/opentuner}} under the MIT License.
+OpenTuner's source code is available\footnote{Hosted at GitHub:
+\texttt{\scriptsize github.com/jansel/opentuner} [Accessed on 23 December 2015]} under the MIT License.
 
 \begin{figure}[htpb]
     \centering
@@ -28,11 +28,13 @@ configurations and writes back the desired results. Using the measurement
 driver available in the framework, the measurements are performed sequentially.
 
 Before running the user-defined measurement function the OpenTuner measurement
+% Não há necessidade de vírgula após "function" neste caso.
 driver calls compilation hooks that can be run in parallel using Python
 threads. When the autotuned program needs to be compiled only once, as in the
 Travelling Salesperson example shown in Section~\ref{sec:exp}, the autotuner
 could respond to more simultaneous result requests if the measurement driver
 was able to also parallelize the runs of the user-defined measurement function.
+% Aqui é "was" mesmo, pois concorda com o "could".
 
 OpenTuner implements optimization techniques such as the
 Nelder-Mead~\cite{nelder1965simplex} simplex method and Simulated

@@ -1,41 +1,30 @@
-\section{Implementation Details}
+\section{Methodology and Protocol}
 \label{sec:ext}
 
-The implementation follows the client-server model, distributing
-measurements of program configurations between a group of virtual
-machines running \emph{MeasurementServer}s in the GCE. The servers
-waits for measurement requests from a client, and maintain copies
-of the program to be autotuned and the user-defined function that
-measures configurations.
+The methodology and protocol proposed in this paper follow the client-server
+model, distributing measurements of program configurations between a group of
+virtual machines running \emph{MeasurementServer}s in the cloud. The servers
+wait for measurement requests from a client, and maintain copies of the
+program to be autotuned and the user-defined function that measures
+configurations.
 
-An interface was also implemented to encapsulate the communication
+An interface encapsulates the communication
 from the client enabling a considerably lower implementation
-effort for the client. Figure~\ref{fig:loc-comp} show a rough
+effort for the client. Figure~\ref{fig:loc-comp} shows a rough
 estimate of the implementation effort for the three components
-of the implementation.
+needed to implement our methodology and protocol.
 
 The machine running the OpenTuner autotuner runs a \emph{MeasurementClient},
 an extension of the native \emph{MeasurementDriver}, that instead of
-compiling and running result requests locally, uses the GCE interface to
-route requests to virtual machines and them saves the results to the local
-database.
+compiling and running result requests locally, uses an interface to
+route requests to virtual machines and then saves the results to the local
+database. 
 
 \begin{figure}[htpb]
     \centering
-    \begin{minipage}{.45\textwidth}
-        \centering
-        \includegraphics[scale=.64]{high-level-implementation}
-        \caption{A high-level view of the architecture.}
-        \label{fig:high-level}
-    \end{minipage}%
-    \hfill
-    \begin{minipage}{.45\textwidth}
-        \centering
-        \includegraphics[scale=.64]{low-level-implementation}
-        \caption{A lower-level view of the architecture.}
-        \label{fig:low-level}
-    \end{minipage}%
-    \label{fig:archs}
+    \includegraphics[scale=.35]{loc_comparison}
+    \caption{An estimate of the implementation effort, measured in lines of code.}
+    \label{fig:loc-comp}
 \end{figure}
 
 Figures~\ref{fig:high-level} and~\ref{fig:low-level} present an
@@ -56,9 +45,20 @@ detail, the GCE interface and the application protocol.
 
 \begin{figure}[htpb]
     \centering
-    \includegraphics[scale=.35]{loc_comparison}
-    \caption{An estimate of the implementation effort, measured in lines of code.}
-    \label{fig:loc-comp}
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \includegraphics[scale=.64]{high-level-implementation}
+        \caption{A high-level view of the architecture.}
+        \label{fig:high-level}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{.45\textwidth}
+        \centering
+        \includegraphics[scale=.64]{low-level-implementation}
+        \caption{A lower-level view of the architecture.}
+        \label{fig:low-level}
+    \end{minipage}%
+    \label{fig:archs}
 \end{figure}
 
 \subsection{Measurement Server and Client}
@@ -82,10 +82,7 @@ process\_all} and \texttt{\footnotesize run\_desired\_results} functions route
 the result requests to the virtual machines using the \emph{GCEInterface}.
 
 An instance of the \emph{MeasurementServer} runs in every virtual machine. The
-server is installed after the machine's initialisation and waits for TCP
-connections from a single client. The application protocol used in
-communications between the clients and servers is described in
-Section~\ref{sec:app}.
+server waits for TCP connections from a single client.
 
 \subsection{GCE Interface}
 \label{sec:gce}
@@ -98,7 +95,7 @@ storing each measurement server's IP.
 
 The interface enables the \emph{MeasurementClient} to request results from
 the servers without knowledge of the application protocol. Running our
-client-server implementation in another cloud environment would require a
+client-server methodology in another cloud environment would require a
 new interface that manages virtual machines in this environment, but no
 modifications are needed to the server or client.
 
@@ -145,10 +142,9 @@ shows the format of a server response.
     \label{fig:response-template}
 \end{figure}
 
-\paragraph{Code Availability}
-
-The code for the measurement server, client and the interface is
-available\footnote{All code is hosted at GitHub: \\ \texttt{\scriptsize
-github.com/phrb/measurement-server} \\ \texttt{\scriptsize
-github.com/phrb/gce\_interface} \\ \texttt{\scriptsize
-github.com/phrb/measurement\_client}} under the GNU General Public License.
+% Tive problemas com overfull nesse parágrafo, então removi os http.
+% Usar a nota de rodapé evita esse overfull.
+All the code implemented for the proposed methodology and protocol is publicly
+available at \path{github.com/phrb/measurement-server}, 
+\path{github.com/phrb/gce_interface} and 
+\path{github.com/phrb/measurement_client} under the GNU General Public License.
