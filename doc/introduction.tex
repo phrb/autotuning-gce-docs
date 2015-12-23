@@ -22,8 +22,8 @@ domains~\cite{ansel2014opentuner,hutter2009paramils}.
 The OpenTuner framework~\cite{ansel2014opentuner} provides tools for the
 implementation of autotuners for various problem domains. It implements
 different search techniques that explore the same search space for program
-optimizations. 
-Running and measuring program execution time --- that is, the empirical 
+optimizations.
+Running and measuring program execution time --- that is, the empirical
 exploration of the search space --- is done sequentially.
 The framework provides support for parallel compilation.
 
@@ -41,18 +41,18 @@ The interactions between the local and virtual machines follows the
 client-server model. The local machine runs a measurement client that requests
 results from various measurement servers running in virtual machines hosted at
 a public cloud. The experiments in this paper used the Google Compute Engine
-(GCE).  We compare the performance of our extension with the unmodified
-framework in a benchmark of applications, identifying the problem domains that
-benefit from this cloud-based approach.
+(GCE).  We compare the performance of our methodology, implemented as an
+OpenTuner extension, with the unmodified framework using two instances of the
+Travelling Salesperson Problem.
 
 The rest of the paper is organized as follows.
 Section~\ref{sec:related} discusses related work.
 Section~\ref{sec:ot} describes the architecture of the OpenTuner framework.
-Section~\ref{sec:ext} presents the proposed methodology, the architecture of 
-the measurement driver extension, the GCE interface and the application 
+Section~\ref{sec:ext} presents the proposed methodology, the architecture of
+the measurement driver extension, the GCE interface and the application
 protocol.
 Section~\ref{sec:norm} discusses the result normalization strategies.
 Section~\ref{sec:exp} describes the experiments performed and the
-applications used in the benchmark.
+application used in the benchmark.
 Section~\ref{sec:results} discusses the results obtained.
 Section~\ref{sec:conclusion} concludes the paper.

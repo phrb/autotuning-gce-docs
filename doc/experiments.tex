@@ -3,8 +3,8 @@
 This section describes the Travelling Salesperson Problem (TSP) and the Google
 Compute Engine's virtual machines and project settings used to evaluate the
 efficacy of the proposed methodology and protocol.  The performances of
-the autotuner for the TSP were measured in 12 different
-experimental settings. Each tuning run lasted 15 minutes, used 2, 4 or 8
+the autotuner for the TSP were measured in 8 different
+experimental settings. Each tuning run lasted 15 minutes, used 2 or 4
 virtual machines, and was repeated 4 times.  We also varied the number of
 result requests that each virtual machine in a tuning run processed, namely 1,
 4, 8 or 16 requests per machine.
@@ -16,7 +16,7 @@ RAM (Google Compute Engine machine type \texttt{\footnotesize n1-standard-1}).
 All experiments were performed with machines from the \texttt{\footnotesize
 us-central1-f} zone. We built a virtual machine image with the latest stable
 Debian distribution and all dependencies installed, speeding up the virtual
-machines' initialization time.
+machines' initialization time. The local machine was an 8-core machine
 
 \subsection{Travelling Salesperson Problem}
 
