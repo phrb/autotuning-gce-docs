@@ -1,6 +1,21 @@
 \section{Conclusion} \label{sec:conclusion}
 
-This paper presented an extension of the OpenTuner autotuning framework
-enabling it to leverage the cloud computing resources from GCE.  We propose
-four approaches to solve the result normalization problem which would enable
-transposing the results obtained in virtual machines to a local machine.
+This paper presented a methodology and an application protocol for distributing
+autotuning measurements using cloud computing. We also present an
+implementation of the methodology and protocol, as an extension of the
+OpenTuner autotuning framework.  We evaluate the performance and costs of our
+methodology and protocol using instances of the Travelling Salesperson Problem
+and the Google Compute Engine.
+Our results show that the methodology lowers the costs of finding a solution
+for the TSP.
+We propose four approaches to solve the result normalization problem which
+would enable transposing the results obtained in virtual machines to a local
+machine.
+
+Future work will analyse the performance of our methodology and protocol in
+different problem domains, determining the ones that benefit the most from
+this approach. We will also study the normalization techniques we proposed.
+
+To the best of our knowledge, the methodology and protocol presented in this
+paper are the first to propose using cloud computing resources to lower the
+autotuning costs using the OpenTuner framework.
