@@ -2,11 +2,14 @@
 
 This section presents the results for all tuning runs for the TSP instances of
 sizes 532 and 85900.  Figures~\ref{fig:85900boxplot} and~\ref{fig:532boxplot}
-show the distributions of the costs of the best solutions found for the
-instance of size 85900 after 4 separate runs. It shows data for 2 and 4 virtual
-machines hosted in the cloud and receiving different numbers of simultaneous
-result requests.  The figure shows the distribution of the results obtained by
-running the autotuner in the target machine with the unmodified OpenTuner.
+show the distributions of the costs of the best solutions found for the two
+instances after 4 separate runs. It shows data for 2 and 4 VMs
+hosted in the cloud and receiving different numbers of simultaneous result
+requests.  The figures also show the distribution of the results obtained by
+running the autotuner in the target machine with the unmodified OpenTuner.  The
+cost of the solutions is measured as the weight of a tour in the graph defined
+by the instances.
+
 
 \begin{figure}[htpb]
     \centering
@@ -30,7 +33,7 @@ running the autotuner in the target machine with the unmodified OpenTuner.
 
 Figures~\ref{fig:532tspi2} and~\ref{fig:532tspi4} show the best
 runs in the instance of size 532 for the unmodified OpenTuner and
-for each virtual machine configuration.
+for each VM configuration.
 Figures~\ref{fig:85900tspi2} and~\ref{fig:85900tspi4} show the same
 measurements for the instance of size 85900.
 The time overhead in relation to the unmodified OpenTuner is clearly
@@ -42,7 +45,7 @@ due to the initialization of the cloud application.
     \begin{minipage}{.48\textwidth}
         \centering
         \includegraphics[scale=.43]{i2_p_n_comparison}
-        \caption{Measurements using two virtual machine instances, solving
+        \caption{Measurements using two VM instances, solving
                  a TSP instance of size 532.}
         \label{fig:532tspi2}
     \end{minipage}%
@@ -50,7 +53,7 @@ due to the initialization of the cloud application.
     \begin{minipage}{.48\textwidth}
         \centering
         \includegraphics[scale=.43]{i4_p_n_comparison}
-        \caption{Measurements using four virtual machine instances,
+        \caption{Measurements using four VM instances,
                  solving a TSP instance of size 532.}
         \label{fig:532tspi4}
     \end{minipage}%
@@ -59,20 +62,22 @@ due to the initialization of the cloud application.
 
 The tuning runs using our methodology and protocol depend on the initialization
 of a cloud application, and start to produce results later in the tuning run.
-The cost of running the same virtual machine instance used in our experiments
+Despite the graphs from figures~\ref{fig:532tspi2} to~\ref{fig:85900tspi4}
+show that the solution costs of the results obtained with our methodology
+are worst than the ones obtained with the unmodified OpenTuner, the cost of running the same VM instance used in our experiments
 with the Google Compute Engine were as low as
 US\$0.038~\footnote{\path{cloud.google.com/compute/pricing#predefined_machine_types}
-[Accessed on 23 December 2015]} per hour, per instance. The cost of obtaining
+[Accessed on 23 December 2015]} per hour, per instance. The financial cost of obtaining
 an autotuned solution of a given quality with our methodology is therefore
-considerably lower than the cost of acquiring a machine capable of finding
-the same solution.
+considerably lower than the financial cost of acquiring a machine capable of finding
+the same solution. This is the main advantage of our proposal.
 
 \begin{figure}[htpb]
     \centering
     \begin{minipage}{.48\textwidth}
         \centering
         \includegraphics[scale=.43]{i2_p_n_comparison_85900}
-        \caption{Measurements using two virtual machine instances,
+        \caption{Measurements using two VM instances,
                  solving an instance of size 85900.}
         \label{fig:85900tspi2}
     \end{minipage}%
@@ -80,7 +85,7 @@ the same solution.
     \begin{minipage}{.48\textwidth}
         \centering
         \includegraphics[scale=.43]{i4_p_n_comparison_85900}
-        \caption{Measurements using four virtual machine instances,
+        \caption{Measurements using four VM instances,
                  solving an instance of size 85900.}
         \label{fig:85900tspi4}
     \end{minipage}%

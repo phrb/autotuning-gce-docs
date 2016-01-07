@@ -1,17 +1,17 @@
 \section{Result Normalization}
 \label{sec:norm}
 
-The virtual machine instances available in public cloud computing services
+The VM instances available in public cloud computing services
 vary in multiple aspects, such as available memory, number of processing cores
 and disk size.
 When autotuning a program for a certain target machine, using instances
 hosted at a public cloud, it is typical that the target architecture will
-differ from the virtual machines'. Depending on the configuration of the
+differ from the VMs'. Depending on the configuration of the
 cloud application the instances could also have different architectures.
 
 To effectively leverage cloud computing resources for autotuning, a
 normalization technique must be devised that enables the results found in the
-virtual machines to be valid for the target machine.  We present four
+VMs to be valid for the target machine.  We present four
 approaches to this problem. The best approach for each problem domain must be
 experimentally determined, and could be a combination of the approaches
 described here.
@@ -19,14 +19,14 @@ described here.
 \paragraph{Autotune Performance Models}
 Another autotuner could be implemented to optimize parameters of a simple
 performance model, that would associate a configuration's measurement and the
-virtual machine that produced it with a conversion function that transposes
+VM that produced it with a conversion function that transposes
 performance results to the target architecture.
 
 \paragraph{Ensembles of Virtual Machines}
-The cloud application could be composed of virtual machines with different
+The cloud application could be composed of VMs with different
 architectures. The final performance measurement for a configuration would be
-built from some combination of the results obtained in these different virtual
-machines.
+built from some combination of the results obtained in these different
+VMs.
 
 \paragraph{Architecture Simulators} 
 The target machine could be modeled by an architecture simulator such as
@@ -37,4 +37,4 @@ problems, such as the simulator's accuracy and performance.
 \paragraph{Autotune in the Cloud}
 Finally, the normalization problem could be sidestepped, at least in initial
 stages of research, by running the servers and clients in the cloud using
-the same kind of virtual machine.
+the same kind of VM.

@@ -3,7 +3,7 @@
 
 The methodology and protocol proposed in this paper follow the client-server
 model, distributing measurements of program configurations between a group of
-virtual machines running \emph{MeasurementServer}s in the cloud. The servers
+VMs running \emph{MeasurementServer}s in the cloud. The servers
 wait for measurement requests from a client, and maintain copies of the
 program to be autotuned and the user-defined function that measures
 configurations.
@@ -17,7 +17,7 @@ needed to implement our methodology and protocol.
 The machine running the OpenTuner autotuner runs a \emph{MeasurementClient},
 an extension of the native \emph{MeasurementDriver}, that instead of
 compiling and running result requests locally, uses an interface to
-route requests to virtual machines and then saves the results to the local
+route requests to VMs and then saves the results to the local
 database. 
 
 \begin{figure}[htpb]
@@ -32,7 +32,7 @@ overview of the architecture of the extension.
 Figure~\ref{fig:high-level} presents the architecture of an OpenTuner
 application running the measurement client and communicating with the
 measurement servers.  Green boxes in the figure represent OpenTuner modules
-that will not be modified, and blue boxes represent new or modified modules.
+that are not modified, and blue boxes represent new or modified modules.
 
 Figure~\ref{fig:low-level} shows, on a lower level of abstraction, the
 interactions between the measurement client and servers. The client
@@ -66,7 +66,7 @@ detail, the GCE interface and the application protocol.
 
 OpenTuner controls the execution flow of an application with the
 \texttt{\footnotesize main} function of the \emph{TuningRunMain} class. This
-function initialises the database and the search and measurement modules. It
+function initializes the database and the search and measurement modules. It
 then calls the \texttt{\footnotesize main} function of the search driver, which
 runs the main loop of the application.  The search driver generates
 configurations to be tested and saves them to the database. It then calls the
@@ -76,37 +76,37 @@ blocks until the function returns.
 The \texttt{\footnotesize process\_all} function calls the
 \texttt{\footnotesize run\_desired\_results} function, which is able to run
 compilations in parallel but only sequential measurements.  The modified
-\emph{MeasurementDriver} initialises the GCE interface during its own
-initialisation. During execution the overridden \texttt{\footnotesize
+\emph{MeasurementDriver} initializes the GCE interface during its own
+initialization. During execution the overridden \texttt{\footnotesize
 process\_all} and \texttt{\footnotesize run\_desired\_results} functions route
-the result requests to the virtual machines using the \emph{GCEInterface}.
+the result requests to the VMs using the \emph{GCEInterface}.
 
-An instance of the \emph{MeasurementServer} runs in every virtual machine. The
+An instance of the \emph{MeasurementServer} runs in every VM. The
 server waits for TCP connections from a single client.
 
 \subsection{GCE Interface}
 \label{sec:gce}
 
-The interactions between the local \emph{MeasurementClient} and the virtual
-machines' \emph{MeasurementServer}s are mediated by the
+The interactions between the local \emph{MeasurementClient} and the
+VMs' \emph{MeasurementServer}s are mediated by the
 \emph{GCEInterface}, a wrapper of the GCE Python API.
-The interface starts and configures virtual machines
+The interface starts and configures VMs 
 storing each measurement server's IP.
 
 The interface enables the \emph{MeasurementClient} to request results from
 the servers without knowledge of the application protocol. Running our
 client-server methodology in another cloud environment would require a
-new interface that manages virtual machines in this environment, but no
-modifications are needed to the server or client.
+new interface that manages VMs in this environment, but no
+modifications to the server or client would be needed.
 
 \subsection{Application Protocol}
 \label{sec:app}
 
 This section describes the text-based application protocol used in the
-client-server communications mediated by the \emph{GCEInterface}. Note the
-\texttt{\footnotesize CLONE} message. The user's OpenTuner application must
-be a git project available via \texttt{\footnotesize{HTTP}}. The application
-will be cloned to the virtual machine by the server and used to obtain the
+client-server communications mediated by the \emph{GCEInterface}. The user's
+OpenTuner application must be a git project available via
+\texttt{\footnotesize{HTTP}}. The application will be cloned to the VM by the server using the \texttt{\footnotesize CLONE} message.  The
+application's \texttt{\footnotesize run} method will be used to obtain
 autotuning results requested by the client.
 
 \paragraph{Messages}

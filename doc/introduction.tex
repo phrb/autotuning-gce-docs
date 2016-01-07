@@ -25,21 +25,21 @@ different search techniques that explore the same search space for program
 optimizations.
 Running and measuring program execution time --- that is, the empirical
 exploration of the search space --- is done sequentially.
-The framework provides support for parallel compilation.
+The framework also provides support for parallel compilation.
 
 The contributions of this paper are a new methodology and a protocol for the
 distributed execution of autotuners using cloud computing resources.  The
 methodology and protocol are implemented as extensions to the OpenTuner
 framework distributing and parallelizing the exploration of optimization spaces
 by combining results obtained from virtual machines.  A local machine (LM) runs
-the main OpenTuner application. Several virtual machines (VM) run measurement
+the main OpenTuner application. Several virtual machines (VMs) run measurement
 modules and provide results when requested. This distributed approach performs
-a more cost efficient exploration of the search space in comparison with the
+a more cost efficient exploration of the search space in comparison to the
 sequential execution.
 
-The interactions between the local and virtual machines follows the
-client-server model. The local machine runs a measurement client that requests
-results from various measurement servers running in virtual machines hosted at
+The interactions between the LM and VMs follow the
+client-server model. The LM runs a measurement client that requests
+results from various measurement servers running in VMs hosted at
 a public cloud. The experiments in this paper used the Google Compute Engine
 (GCE).  We compare the performance of our methodology, implemented as an
 OpenTuner extension, with the unmodified framework using two instances of the
@@ -55,5 +55,5 @@ Section~\ref{sec:norm} discusses the result normalization strategies.
 Section~\ref{sec:exp} describes the experiments performed and the
 application used in the benchmark.
 Section~\ref{sec:results} discusses the results obtained.
-%Section~\ref{sec:future} describes future work.
+Section~\ref{sec:future} describes future work.
 Section~\ref{sec:conclusion} concludes the paper.

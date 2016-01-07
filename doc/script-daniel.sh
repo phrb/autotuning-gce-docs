@@ -1,1 +1,0 @@
-latex relatorio-daniel-7dez.tex && bibtex relatorio-daniel-7dez && latex relatorio-daniel-7dez.tex && latex relatorio-daniel-7dez.tex && dvips -tletter -o relatorio-daniel-7dez.ps relatorio-daniel-7dez.dvi && ps2pdf relatorio-daniel-7dez.ps && open relatorio-daniel-7dez.pdf 
