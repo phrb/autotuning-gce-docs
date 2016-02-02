@@ -4,3 +4,6 @@
 [submodule "gce_autotuning_experiments"]
 	path = gce_autotuning_experiments
 	url = https://github.com/phrb/gce_autotuning_experiments.git
+[submodule "measurement-server"]
+	path = measurement-server
+	url = https://github.com/phrb/measurement-server.git
